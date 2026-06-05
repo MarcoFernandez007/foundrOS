@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>foundrOS | Autonomous Startup Engine</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="dark-theme">
+    <!-- Auth Overlay -->
+    <div id="auth-overlay" class="auth-overlay active">
+        <div class="auth-card glass-panel">
+            <div class="auth-logo">
+                <i class="fa-solid fa-layer-group"></i>
+                <h2>foundrOS</h2>
+            </div>
+            <p class="auth-subtitle">Welcome to the Zero-Human Autonomous Startup OS</p>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+
+            <form id="auth-form" class="auth-form">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="auth-email" placeholder="founder@startup.com" required>
+                </div>
+                <div class="input-group" id="password-group">
+                    <label>Password</label>
+                    <input type="password" id="auth-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Continue</button>
+            </form>
+
+            <div class="auth-divider"><span>OR</span></div>
+            
+            <button id="google-auth-btn" class="btn btn-outline btn-block btn-google">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" class="google-icon">
+                Sign in with Google
+            </button>
+
+            <div class="legal-links">
+                <a href="#" id="link-terms">Terms</a> &bull; <a href="#" id="link-privacy">Privacy</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app-container" class="app-container hidden">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-layer-group brand-icon"></i>
+                <h2 class="brand-text">foundrOS</h2>
+            </div>
+            
+            <ul class="nav-links">
+                <li class="nav-item active" data-target="view-dashboard">
+                    <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+                </li>
+                <li class="nav-item" data-target="view-portfolio">
+                    <i class="fa-solid fa-briefcase"></i> <span>Portfolio</span>
+                </li>
+                <li class="nav-item" data-target="view-builder">
+                    <i class="fa-solid fa-hammer"></i> <span>Builder v2</span>
+                </li>
+                <li class="nav-item" data-target="view-coscientist">
+                    <i class="fa-solid fa-flask"></i> <span>Co-Scientist</span>
+                </li>
+                <li class="nav-item" data-target="view-hexasai">
+                    <i class="fa-solid fa-brain"></i> <span>Hexa SAI</span>
+                </li>
+                <li class="nav-item" data-target="view-corporate">
+                    <i class="fa-solid fa-building-columns"></i> <span>Corporate</span>
+                </li>
+                <li class="nav-item" data-target="view-3d-map">
+                    <i class="fa-solid fa-network-wired"></i> <span>3D Map & Claw</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="api-status">
+                    <i class="fa-solid fa-bolt status-dot healthy"></i>
+                    <span>Gemini 2.0 Free</span>
+                </div>
+                <div class="theme-toggle" id="theme-toggle">
+                    <i class="fa-solid fa-sun" id="theme-icon"></i>
+                </div>
+                <div class="user-profile" id="logout-btn">
+                    <div class="avatar">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name" id="display-user-name">Founder</span>
+                        <span class="logout-text">Logout</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Global Header -->
+            <header class="global-header">
+                <div class="header-metrics">
+                    <div class="metric-badge">
+                        <span class="metric-label">Global ARR</span>
+                        <span class="metric-value text-accent-cyan" id="global-arr">$142,500</span>
+                    </div>
+                    <div class="metric-badge">
+                        <span class="metric-label">Active Agents</span>
+                        <span class="metric-value text-accent-purple">14/14</span>
+                    </div>
+                    <div class="metric-badge">
+                        <span class="metric-label">Completed Tasks</span>
+                        <span class="metric-value text-accent-lime" id="global-tasks">1,204</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="btn-stripe-billing">
+                        <i class="fa-solid fa-credit-card"></i> Billing
+                    </button>
+                    <button class="btn btn-outline" id="btn-api-settings">
+                        <i class="fa-solid fa-key"></i> API Keys
+                    </button>
+                </div>
+            </header>
+
+            <div class="views-container">
+                <!-- VIEW: Dashboard / Live Feed -->
+                <section id="view-dashboard" class="view-section active">
+                    <div class="dashboard-grid">
+                        <div class="glass-panel col-span-2">
+                            <h3>Live Agent Feed <span class="pulse-dot"></span></h3>
+                            <div class="agent-feed" id="live-agent-feed">
+                                <!-- Feed items injected via JS -->
+                            </div>
+                        </div>
+                        <div class="glass-panel">
+                            <h3>Active Gstack Tasks</h3>
+                            <div class="task-list" id="active-tasks-list">
+                                <!-- Tasks injected via JS -->
+                            </div>
+                        </div>
+                        <div class="glass-panel col-span-3 terminal-container">
+                            <div class="terminal-header">
+                                <span>agent-execution-logs.sh</span>
+                                <div class="terminal-controls">
+                                    <i class="fa-solid fa-circle text-red"></i>
+                                    <i class="fa-solid fa-circle text-yellow"></i>
+                                    <i class="fa-solid fa-circle text-green"></i>
+                                </div>
+                            </div>
+                            <div class="terminal-body" id="terminal-output">
+                                <p><span class="text-accent-cyan">system@foundrOS</span>:~$ initializing multi-agent network...</p>
+                            </div>
+                            <div class="terminal-input-row">
+                                <span class="text-accent-cyan">founder@foundrOS</span>:~$ 
+                                <input type="text" id="terminal-input" placeholder="Inject priority directive...">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: Portfolio -->
+                <section id="view-portfolio" class="view-section hidden">
+                    <div class="view-header">
+                        <h2>Company Portfolio</h2>
+                        <button class="btn btn-primary" id="btn-launch-new"><i class="fa-solid fa-plus"></i> Launch New</button>
+                    </div>
+                    <div class="portfolio-grid" id="portfolio-grid">
+                        <!-- Portfolio cards injected via JS -->
+                    </div>
+                </section>
+
+                <!-- VIEW: Builder v2 -->
+                <section id="view-builder" class="view-section hidden">
+                    <div class="builder-layout">
+                        <div class="builder-sidebar glass-panel">
+                            <h3>Business Builder v2</h3>
+                            <div class="input-group">
+                                <label>Seed Idea</label>
+                                <textarea id="builder-prompt" placeholder="Describe the startup idea..."></textarea>
+                                <div class="builder-toolbar">
+                                    <span class="toolbar-hint"><i class="fa-solid fa-circle-info"></i> Describe your vision and let the agents build it</span>
+                                    <button class="btn btn-sm btn-gstack" id="btn-gstack-opt">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> Optimize
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-block" id="btn-start-build">Start Autonomous Build</button>
+                            
+                            <h4 class="mt-4">Gstack Pipeline Status</h4>
+                            <div class="gstack-status-list" id="gstack-status-list">
+                                <!-- Agent status injected here -->
+                            </div>
+                        </div>
+                        <div class="builder-preview glass-panel">
+                            <div class="preview-header">
+                                <span>Live HTML Preview</span>
+                                <div class="preview-actions">
+                                    <button class="btn btn-sm btn-outline" id="btn-publish-github"><i class="fa-brands fa-github"></i> Publish</button>
+                                    <button class="btn btn-sm btn-outline" id="btn-download-zip"><i class="fa-solid fa-file-zipper"></i> ZIP</button>
+                                </div>
+                            </div>
+                            <div class="preview-frame-container">
+                                <iframe id="builder-iframe" class="builder-iframe" sandbox="allow-scripts allow-same-origin"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: Google Co-Scientist -->
+                <section id="view-coscientist" class="view-section hidden">
+                    <div class="view-header">
+                        <h2>Google Co-Scientist Innovation Engine</h2>
+                        <span class="badge badge-purple">Autonomous Hypothesis Generation</span>
+                    </div>
+                    <div class="coscientist-grid">
+                        <div class="glass-panel">
+                            <h3>Domain Transfer Input</h3>
+                            <div class="input-group">
+                                <label>Source Domain (Optional)</label>
+                                <input type="text" id="co-source-domain" placeholder="e.g., Gaming Microtransactions">
+                            </div>
+                            <div class="input-group">
+                                <label>Target Domain</label>
+                                <input type="text" id="co-target-domain" placeholder="e.g., Healthcare SaaS">
+                            </div>
+                            <button class="btn btn-primary btn-block" id="btn-start-co-scientist">Initiate Debate</button>
+                        </div>
+                        
+                        <div class="glass-panel col-span-2">
+                            <h3>Multi-Agent Debate Arena</h3>
+                            <div class="debate-arena" id="debate-arena">
+                                <div class="agent-box generator-agent">
+                                    <h4><i class="fa-solid fa-lightbulb"></i> Generator</h4>
+                                    <div class="agent-speech" id="co-generator-speech">Waiting for input...</div>
+                                </div>
+                                <div class="vs-badge">VS</div>
+                                <div class="agent-box critic-agent">
+                                    <h4><i class="fa-solid fa-gavel"></i> Critic</h4>
+                                    <div class="agent-speech" id="co-critic-speech">Ready to stress-test.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel col-span-3">
+                            <h3>Tournament Elo Leaderboard (Ranker)</h3>
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Hypothesis / Venture Idea</th>
+                                            <th>Elo Rating</th>
+                                            <th>Feasibility</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="co-leaderboard">
+                                        <!-- Injected via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: Hexa SAI -->
+                <section id="view-hexasai" class="view-section hidden">
+                    <div class="view-header">
+                        <h2>Hexa SAI Self-Improvement Harness</h2>
+                    </div>
+                    <div class="hexasai-grid">
+                        <div class="glass-panel">
+                            <h3>Active Harness Weights</h3>
+                            <div class="weights-list" id="hexasai-weights">
+                                <!-- Injected via JS -->
+                            </div>
+                        </div>
+                        <div class="glass-panel col-span-2">
+                            <h3>Loss Curve & Optimization Metric</h3>
+                            <div class="chart-container">
+                                <canvas id="hexa-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="glass-panel col-span-3 terminal-container">
+                            <div class="terminal-header">
+                                <span>hexa_mutations.log</span>
+                            </div>
+                            <div class="terminal-body" id="hexa-log">
+                                <p><span class="text-accent-lime">HexaSAI</span>: Harness initialized. Monitoring iteration loops...</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: Corporate Suite -->
+                <section id="view-corporate" class="view-section hidden">
+                    <div class="corporate-tabs">
+                        <button class="corp-tab active" data-target="corp-finance">Finance Projections</button>
+                        <button class="corp-tab" data-target="corp-captable">Cap Table</button>
+                        <button class="corp-tab" data-target="corp-legal">Legal & Incorporation</button>
+                    </div>
+                    
+                    <div class="corp-content">
+                        <!-- Finance -->
+                        <div id="corp-finance" class="corp-panel active">
+                            <div class="glass-panel">
+                                <h3>5-Year Cash Flow Projection</h3>
+                                <div class="chart-container-large">
+                                    <canvas id="finance-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Cap Table -->
+                        <div id="corp-captable" class="corp-panel hidden">
+                            <div class="glass-panel">
+                                <h3>Cap Table Manager</h3>
+                                <div class="table-container">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Stakeholder</th>
+                                                <th>Role</th>
+                                                <th>Shares</th>
+                                                <th>Ownership %</th>
+                                                <th>Vesting</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cap-table-body">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Legal -->
+                        <div id="corp-legal" class="corp-panel hidden">
+                            <div class="legal-grid">
+                                <div class="glass-panel">
+                                    <h3>Incorporation Wizard</h3>
+                                    <div class="input-group">
+                                        <label>Entity Name</label>
+                                        <input type="text" value="Autonomous AI Inc.">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>State</label>
+                                        <select>
+                                            <option>Delaware (C-Corp)</option>
+                                            <option>Wyoming (LLC)</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-primary btn-block" id="btn-incorporate">File Articles of Organization</button>
+                                    <div id="incorp-status" class="mt-2 text-sm text-accent-cyan"></div>
+                                </div>
+                                <div class="glass-panel">
+                                    <h3>Legal Document Center</h3>
+                                    <ul class="doc-list">
+                                        <li><span><i class="fa-solid fa-file-signature"></i> standard_nda.pdf</span> <button class="btn btn-sm btn-outline dl-btn">Generate</button></li>
+                                        <li><span><i class="fa-solid fa-file-contract"></i> cofounder_equity_agreement.pdf</span> <button class="btn btn-sm btn-outline dl-btn">Generate</button></li>
+                                        <li><span><i class="fa-solid fa-file-shield"></i> ip_assignment.pdf</span> <button class="btn btn-sm btn-outline dl-btn">Generate</button></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- VIEW: 3D Map -->
+                <section id="view-3d-map" class="view-section hidden">
+                    <div class="view-header">
+                        <h2>Agent Visualizations</h2>
+                        <div class="view-toggles">
+                            <button class="btn btn-sm btn-primary active-toggle" id="btn-toggle-rts">RTS Orchestration Map</button>
+                            <button class="btn btn-sm btn-outline" id="btn-toggle-claw">Claw3D Office Scene</button>
+                        </div>
+                    </div>
+                    <div class="glass-panel three-container-panel">
+                        <div id="three-canvas-container" class="three-canvas-container">
+                            <!-- ThreeJS injected here -->
+                        </div>
+                        <div class="three-overlay">
+                            <div id="three-legend" class="three-legend glass-panel">
+                                <h4>Agent Roles</h4>
+                                <ul>
+                                    <li><span class="legend-dot ceo"></span> CEO Agent</li>
+                                    <li><span class="legend-dot dev"></span> Engineering</li>
+                                    <li><span class="legend-dot mkt"></span> Marketing</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="stripe-modal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3>Stripe Billing Portal</h3>
+                <button class="close-btn" id="close-stripe"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="pricing-card">
+                    <h4>foundrOS Pro</h4>
+                    <p class="price">$99<span>/mo</span></p>
+                    <ul>
+                        <li><i class="fa-solid fa-check text-green"></i> Unlimited Agents</li>
+                        <li><i class="fa-solid fa-check text-green"></i> Hexa SAI Enabled</li>
+                        <li><i class="fa-solid fa-check text-green"></i> Corporate Suite</li>
+                    </ul>
+                    <button class="btn btn-primary btn-block mt-4" id="btn-stripe-checkout">Proceed to Checkout</button>
+                    <p class="text-sm text-center mt-2" id="stripe-status"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="api-modal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3>API Configuration</h3>
+                <button class="close-btn" id="close-api"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Gemini API Key</label>
+                    <input type="password" id="gemini-api-key" placeholder="AIzaSy...">
+                </div>
+                <div class="input-group">
+                    <label>GitHub Personal Access Token (Optional)</label>
+                    <input type="password" id="github-pat-key" placeholder="ghp_...">
+                    <p class="text-sm text-secondary mt-2">Required for publishing code directly to GitHub.</p>
+                </div>
+                <button class="btn btn-primary btn-block mt-4" id="btn-save-api">Save Configuration</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="google-auth-modal" class="modal hidden">
+        <div class="modal-content glass-panel" style="max-width: 400px; text-align: center;">
+            <div class="modal-header">
+                <h3>Sign in with Google</h3>
+                <button class="close-btn" id="close-google-auth"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p>Please enter your Google email to authenticate:</p>
+                <div class="input-group text-left mt-4">
+                    <input type="email" id="google-auth-input" placeholder="you@gmail.com">
+                </div>
+                <button class="btn btn-primary btn-block mt-4" id="btn-confirm-google">Authenticate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Application Logic -->
+    <script src="llm.js"></script>
+    <script src="hexa_sai.js"></script>
+    <script src="corporate.js"></script>
+    <script src="agents.js"></script>
+    <script src="co_scientist.js"></script>
+    <script src="three-scenes.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

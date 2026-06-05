@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_OTHER",
+  "summary": "Main application logic, routing, auth, and state management for foundrOS.",
+  "updatedAt": "2026-06-02T08:55:26.444030700Z"
+}
