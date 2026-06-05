@@ -197,4 +197,48 @@ function initBuilderEvents() {
             }
         });
     }
+
+    // ZIP Download Logic
+    const btnZip = document.getElementById('btn-download-zip');
+    if(btnZip) {
+        btnZip.addEventListener('click', async () => {
+            if(!lastGeneratedCode) {
+                alert("No code generated yet to download.");
+                return;
+            }
+
+            btnZip.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Compressing...';
+            
+            try {
+                const zip = new JSZip();
+                
+                // Add the generated HTML file
+                zip.file("index.html", lastGeneratedCode);
+                
+                // Add a simple README
+                zip.file("README.md", "# foundrOS Generated App\n\nAutonomously built by the foundrOS multi-agent system.\n\nTo run, simply open `index.html` in your web browser.");
+
+                // Generate ZIP file blob
+                const content = await zip.generateAsync({ type: "blob" });
+                
+                // Trigger download
+                const url = URL.createObjectURL(content);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `foundros-app-${Date.now()}.zip`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                btnZip.innerHTML = '<i class="fa-solid fa-check"></i> Downloaded';
+                window.logToTerminal(`App packaged and downloaded as ZIP.`, 'system');
+                
+                setTimeout(() => { btnZip.innerHTML = '<i class="fa-solid fa-file-zipper"></i> ZIP'; }, 3000);
+            } catch (err) {
+                alert(`ZIP Creation Error: ${err.message}`);
+                btnZip.innerHTML = '<i class="fa-solid fa-file-zipper"></i> ZIP';
+            }
+        });
+    }
 }
