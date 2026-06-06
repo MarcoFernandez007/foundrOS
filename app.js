@@ -19,6 +19,7 @@ const AppState = {
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
+    initLandingPage();
     initAuth();
     initNavigation();
     initModals();
@@ -135,10 +136,28 @@ function simulateLogin(userData) {
 }
 
 function loginSuccess() {
+    document.getElementById('landing-page').classList.remove('active');
     document.getElementById('auth-overlay').classList.remove('active');
     document.getElementById('app-container').classList.remove('hidden');
     document.getElementById('display-user-name').innerText = AppState.user.name;
     if(window.initAgents) window.initAgents();
+}
+
+// --- Landing Page Logic ---
+function initLandingPage() {
+    const landingPage = document.getElementById('landing-page');
+    const authOverlay = document.getElementById('auth-overlay');
+    
+    const showAuth = (tabName) => {
+        if(landingPage) landingPage.classList.remove('active');
+        if(authOverlay) authOverlay.classList.add('active');
+        const tab = document.querySelector(`.auth-tab[data-tab="${tabName}"]`);
+        if(tab) tab.click();
+    };
+
+    document.getElementById('btn-landing-login')?.addEventListener('click', () => showAuth('login'));
+    document.getElementById('btn-landing-start')?.addEventListener('click', () => showAuth('signup'));
+    document.getElementById('btn-hero-start')?.addEventListener('click', () => showAuth('signup'));
 }
 
 // --- Navigation & Routing ---

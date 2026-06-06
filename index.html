@@ -12,8 +12,61 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body class="dark-theme">
+    <!-- Landing Page -->
+    <div id="landing-page" class="landing-page active">
+        <nav class="landing-nav glass-panel">
+            <div class="landing-logo">
+                <i class="fa-solid fa-layer-group text-accent-cyan"></i>
+                <h2>foundrOS</h2>
+            </div>
+            <div class="landing-nav-actions">
+                <button class="btn btn-outline" id="btn-landing-login">Login</button>
+                <button class="btn btn-primary" id="btn-landing-start">Get Started</button>
+            </div>
+        </nav>
+        
+        <header class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">The First Zero-Human<br><span class="text-gradient">Autonomous Startup OS</span></h1>
+                <p class="hero-subtitle">Turn an idea into a fully incorporated, revenue-generating business with a network of 14 specialized AI agents working around the clock.</p>
+                <div class="hero-actions">
+                    <button class="btn btn-primary btn-large" id="btn-hero-start">Initialize OS <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="orb"></div>
+            </div>
+        </header>
+
+        <section class="features-section">
+            <h2 class="section-title">Core Capabilities</h2>
+            <div class="features-grid">
+                <div class="feature-card glass-panel">
+                    <i class="fa-solid fa-users-gear feature-icon text-accent-purple"></i>
+                    <h3>14 Coordinated Agents</h3>
+                    <p>A full C-suite in the cloud. From engineering to marketing, the Gstack pipeline orchestrates a dedicated workforce to build your vision.</p>
+                </div>
+                <div class="feature-card glass-panel">
+                    <i class="fa-solid fa-brain feature-icon text-accent-lime"></i>
+                    <h3>Hexa SAI Harness</h3>
+                    <p>The system evaluates its own code, mutates hyperparameters, and improves output quality through continuous iteration and feedback loops.</p>
+                </div>
+                <div class="feature-card glass-panel">
+                    <i class="fa-solid fa-building-columns feature-icon text-accent-cyan"></i>
+                    <h3>Corporate Suite</h3>
+                    <p>Autonomous financial projections, dynamic cap tables, and instant legal document generation including full incorporation filings.</p>
+                </div>
+                <div class="feature-card glass-panel">
+                    <i class="fa-solid fa-flask feature-icon text-accent-red"></i>
+                    <h3>Google Co-Scientist</h3>
+                    <p>Generator vs Critic debates synthesize cross-domain hypotheses, automatically ranked on an Elo tournament leaderboard to find your best venture.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
     <!-- Auth Overlay -->
-    <div id="auth-overlay" class="auth-overlay active">
+    <div id="auth-overlay" class="auth-overlay">
         <div class="auth-card glass-panel">
             <div class="auth-logo">
                 <i class="fa-solid fa-layer-group"></i>
