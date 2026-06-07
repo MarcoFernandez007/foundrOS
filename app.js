@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initModals();
     renderPortfolio();
+    initKanban();
 });
 
 // --- Theme Management ---
@@ -260,4 +261,62 @@ window.logToTerminal = function(message, source = 'system') {
     p.innerHTML = `<span class="${sourceColor}">${source}@foundrOS</span>:~$ ${message}`;
     terminal.appendChild(p);
     terminal.scrollTop = terminal.scrollHeight;
+}
+
+// --- Kanban Logic ---
+function initKanban() {
+    const cards = document.querySelectorAll('.kanban-card');
+    const cols = document.querySelectorAll('.kanban-col');
+
+    cards.forEach(card => {
+        card.addEventListener('dragstart', () => {
+            card.classList.add('dragging');
+        });
+        card.addEventListener('dragend', () => {
+            card.classList.remove('dragging');
+            updateKanbanCounts();
+        });
+    });
+
+    cols.forEach(col => {
+        col.addEventListener('dragover', e => {
+            e.preventDefault();
+            col.classList.add('drag-over');
+            const afterElement = getDragAfterElement(col.querySelector('.kanban-cards'), e.clientY);
+            const draggable = document.querySelector('.dragging');
+            if (afterElement == null) {
+                col.querySelector('.kanban-cards').appendChild(draggable);
+            } else {
+                col.querySelector('.kanban-cards').insertBefore(draggable, afterElement);
+            }
+        });
+        col.addEventListener('dragleave', () => {
+            col.classList.remove('drag-over');
+        });
+        col.addEventListener('drop', () => {
+            col.classList.remove('drag-over');
+        });
+    });
+}
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.kanban-card:not(.dragging)')];
+
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+function updateKanbanCounts() {
+    document.querySelectorAll('.kanban-col').forEach(col => {
+        const count = col.querySelectorAll('.kanban-card').length;
+        const countBadge = col.querySelector('.kanban-count');
+        if(countBadge) countBadge.innerText = count;
+    });
 }

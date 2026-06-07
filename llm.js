@@ -8,7 +8,7 @@ const LLMEngine = {
             throw new Error('Gemini API key is missing. Please configure it in the API settings.');
         }
 
-        const model = 'gemini-2.5-flash';
+        const model = 'gemini-3.1-pro';
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
         const requestBody = {

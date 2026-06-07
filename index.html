@@ -140,7 +140,7 @@
             <div class="sidebar-footer">
                 <div class="api-status">
                     <i class="fa-solid fa-bolt status-dot healthy"></i>
-                    <span>Gemini 2.0 Free</span>
+                    <span>Gemini 3.1 Pro</span>
                 </div>
                 <div class="theme-toggle" id="theme-toggle">
                     <i class="fa-solid fa-sun" id="theme-icon"></i>
@@ -188,36 +188,140 @@
             <div class="views-container">
                 <!-- VIEW: Dashboard / Live Feed -->
                 <section id="view-dashboard" class="view-section active">
-                    <div class="dashboard-grid">
-                        <div class="glass-panel col-span-2">
-                            <h3>Live Agent Feed <span class="pulse-dot"></span></h3>
-                            <div class="agent-feed" id="live-agent-feed">
-                                <!-- Feed items injected via JS -->
-                            </div>
-                        </div>
-                        <div class="glass-panel">
-                            <h3>Active Gstack Tasks</h3>
-                            <div class="task-list" id="active-tasks-list">
-                                <!-- Tasks injected via JS -->
-                            </div>
-                        </div>
-                        <div class="glass-panel col-span-3 terminal-container">
-                            <div class="terminal-header">
-                                <span>agent-execution-logs.sh</span>
-                                <div class="terminal-controls">
-                                    <i class="fa-solid fa-circle text-red"></i>
-                                    <i class="fa-solid fa-circle text-yellow"></i>
-                                    <i class="fa-solid fa-circle text-green"></i>
+                    <div class="dashboard-rows">
+                        
+                        <!-- Row 1: Autonomous AI business builder and operator -->
+                        <div class="dashboard-row">
+                            <h2 class="row-header">Autonomous AI business builder and operator</h2>
+                            <div class="dashboard-grid row-3-cols">
+                                <div class="glass-panel">
+                                    <h3>Live Agent Feed <span class="pulse-dot"></span></h3>
+                                    <div class="agent-feed" id="live-agent-feed">
+                                        <!-- Feed items injected via JS -->
+                                    </div>
+                                </div>
+                                <div class="glass-panel">
+                                    <h3>Active Gstack Tasks</h3>
+                                    <div class="task-list" id="active-tasks-list">
+                                        <!-- Tasks injected via JS -->
+                                    </div>
+                                </div>
+                                <div class="glass-panel text-center flex-center-col">
+                                    <i class="fa-brands fa-y-combinator text-accent-red" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                    <h3>Gstack YC Implementation</h3>
+                                    <p class="text-sm text-secondary mt-2">Optimal YC combinator business implementation via specialized AI business agents.</p>
+                                    <div class="mt-4"><span class="badge badge-purple">14 Agents Active</span></div>
                                 </div>
                             </div>
-                            <div class="terminal-body" id="terminal-output">
-                                <p><span class="text-accent-cyan">system@foundrOS</span>:~$ initializing multi-agent network...</p>
-                            </div>
-                            <div class="terminal-input-row">
-                                <span class="text-accent-cyan">founder@foundrOS</span>:~$ 
-                                <input type="text" id="terminal-input" placeholder="Inject priority directive...">
+                        </div>
+
+                        <!-- Row 2: Recursive self-improvement AI... -->
+                        <div class="dashboard-row">
+                            <h2 class="row-header">Recursive self-improvement AI for infinite AI business improvement</h2>
+                            <div class="dashboard-grid row-3-cols">
+                                <div class="glass-panel text-center flex-center-col">
+                                    <i class="fa-solid fa-brain text-accent-lime" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                    <h3>Hexa SAI</h3>
+                                    <p class="text-sm text-secondary mt-2">Live harness optimization and weight mutation loops.</p>
+                                    <button class="btn btn-sm btn-outline mt-4" onclick="document.querySelector('.nav-item[data-target=\'view-hexasai\']').click()">View Loss Curve</button>
+                                </div>
+                                <div class="glass-panel text-center flex-center-col">
+                                    <i class="fa-solid fa-flask text-accent-cyan" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                    <h3>Co-Scientist</h3>
+                                    <p class="text-sm text-secondary mt-2">Generator vs Critic domain synthesis.</p>
+                                    <button class="btn btn-sm btn-outline mt-4" onclick="document.querySelector('.nav-item[data-target=\'view-coscientist\']').click()">View Debates</button>
+                                </div>
+                                <div class="glass-panel text-center flex-center-col">
+                                    <i class="fa-solid fa-satellite-dish text-accent-purple" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                    <h3>Autoresearch Loop</h3>
+                                    <p class="text-sm text-secondary mt-2">Continuous market trend and signal processing.</p>
+                                    <div class="mt-4 text-sm text-accent-lime">Status: Scraping ArXiv...</div>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Row 3: Kanban -->
+                        <div class="dashboard-row">
+                            <h2 class="row-header">foundrOS Task Engine <span class="badge" style="background: rgba(255,255,255,0.1)">Kanban</span></h2>
+                            <div class="kanban-board">
+                                <!-- Backlog -->
+                                <div class="kanban-col">
+                                    <h4>Backlog <span class="kanban-count">2</span></h4>
+                                    <div class="kanban-cards" data-col="backlog">
+                                        <div class="kanban-card glass-panel" draggable="true">
+                                            <div class="kanban-card-title">Setup Stripe Webhooks</div>
+                                            <div class="kanban-card-footer">
+                                                <span class="assignee-badge type-human"><i class="fa-solid fa-user"></i> You</span>
+                                            </div>
+                                        </div>
+                                        <div class="kanban-card glass-panel" draggable="true">
+                                            <div class="kanban-card-title">Draft YC Application</div>
+                                            <div class="kanban-card-footer">
+                                                <span class="assignee-badge type-agent"><i class="fa-solid fa-robot"></i> @CEO_Agent</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- To Do -->
+                                <div class="kanban-col">
+                                    <h4>To Do <span class="kanban-count">1</span></h4>
+                                    <div class="kanban-cards" data-col="todo">
+                                        <div class="kanban-card glass-panel" draggable="true">
+                                            <div class="kanban-card-title">Create LLC Operating Agreement</div>
+                                            <div class="kanban-card-footer">
+                                                <span class="assignee-badge type-agent"><i class="fa-solid fa-robot"></i> @Legal_Agent</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- In Progress -->
+                                <div class="kanban-col">
+                                    <h4>In Progress <span class="kanban-count">1</span></h4>
+                                    <div class="kanban-cards" data-col="inprogress">
+                                        <div class="kanban-card glass-panel" draggable="true">
+                                            <div class="kanban-card-title">Implement Dashboard Redesign</div>
+                                            <div class="kanban-card-footer">
+                                                <span class="assignee-badge type-agent"><i class="fa-solid fa-robot"></i> @Dev_Agent</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Done -->
+                                <div class="kanban-col">
+                                    <h4>Done <span class="kanban-count">1</span></h4>
+                                    <div class="kanban-cards" data-col="done">
+                                        <div class="kanban-card glass-panel" draggable="true">
+                                            <div class="kanban-card-title">Gemini 3.1 Pro Integration</div>
+                                            <div class="kanban-card-footer">
+                                                <span class="assignee-badge type-agent"><i class="fa-solid fa-robot"></i> @System</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terminal -->
+                        <div class="dashboard-row">
+                            <div class="glass-panel terminal-container">
+                                <div class="terminal-header">
+                                    <span>agent-execution-logs.sh</span>
+                                    <div class="terminal-controls">
+                                        <i class="fa-solid fa-circle text-red"></i>
+                                        <i class="fa-solid fa-circle text-yellow"></i>
+                                        <i class="fa-solid fa-circle text-green"></i>
+                                    </div>
+                                </div>
+                                <div class="terminal-body" id="terminal-output">
+                                    <p><span class="text-accent-cyan">system@foundrOS</span>:~$ initializing multi-agent network with Gemini 3.1 Pro...</p>
+                                </div>
+                                <div class="terminal-input-row">
+                                    <span class="text-accent-cyan">founder@foundrOS</span>:~$ 
+                                    <input type="text" id="terminal-input" placeholder="Inject priority directive...">
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </section>
 
