@@ -120,6 +120,9 @@
                 <li class="nav-item" data-target="view-portfolio">
                     <i class="fa-solid fa-briefcase"></i> <span>Portfolio</span>
                 </li>
+                <li class="nav-item" data-target="view-command-center">
+                    <i class="fa-solid fa-gamepad"></i> <span>Command Center</span>
+                </li>
                 <li class="nav-item" data-target="view-builder">
                     <i class="fa-solid fa-hammer"></i> <span>Builder v2</span>
                 </li>
@@ -333,6 +336,46 @@
                     </div>
                     <div class="portfolio-grid" id="portfolio-grid">
                         <!-- Portfolio cards injected via JS -->
+                    </div>
+                </section>
+
+                <!-- VIEW: Command Center (RTS Gamified) -->
+                <section id="view-command-center" class="view-section hidden">
+                    <div class="rts-container">
+                        <!-- Top HUD -->
+                        <div class="rts-hud-top">
+                            <div class="rts-resource"><i class="fa-solid fa-coins text-accent-red"></i> AP: <span id="rts-ap">1000</span></div>
+                            <div class="rts-resource"><i class="fa-solid fa-bolt text-accent-cyan"></i> Energy: <span id="rts-energy">100%</span></div>
+                            <div class="rts-timer">T-Minus 00:45:12</div>
+                        </div>
+
+                        <!-- Main Battlefield -->
+                        <div class="rts-battlefield" id="rts-battlefield">
+                            <!-- Agent Units will be injected here -->
+                        </div>
+
+                        <!-- Bottom Console -->
+                        <div class="rts-hud-bottom">
+                            <div class="rts-minimap" id="rts-minimap">
+                                <!-- Minimap blips -->
+                                <div class="minimap-scanner"></div>
+                            </div>
+                            
+                            <div class="rts-selection-panel">
+                                <h4 id="rts-selected-name">NO UNIT SELECTED</h4>
+                                <div class="rts-unit-stats">
+                                    <div class="stat-bar"><div class="stat-fill bg-accent-lime" style="width: 100%"></div></div>
+                                    <span class="text-xs text-secondary" id="rts-selected-status">Awaiting Orders</span>
+                                </div>
+                            </div>
+
+                            <div class="rts-action-grid" id="rts-action-grid">
+                                <button class="rts-btn" disabled><i class="fa-solid fa-pen-nib"></i> Draft</button>
+                                <button class="rts-btn" disabled><i class="fa-solid fa-code"></i> Code</button>
+                                <button class="rts-btn" disabled><i class="fa-solid fa-magnifying-glass"></i> Scan</button>
+                                <button class="rts-btn" disabled><i class="fa-solid fa-paper-plane"></i> Deploy</button>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -631,6 +674,7 @@
     <script src="agents.js"></script>
     <script src="co_scientist.js"></script>
     <script src="three-scenes.js"></script>
+    <script src="command_center.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
