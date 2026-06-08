@@ -16,12 +16,15 @@ const AppState = {
     }
 };
 
+const BUSINESS_BUILDER_STARTER_PROMPT = 'Build a B2B AI workflow automation startup for small operations teams. Include MVP, monetization, and launch KPIs.';
+
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initLandingPage();
     initAuth();
     initNavigation();
+    initPortfolioActions();
     initModals();
     renderPortfolio();
     initKanban();
@@ -166,25 +169,30 @@ function initNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', () => {
-            navItems.forEach(n => n.classList.remove('active'));
-            item.classList.add('active');
-
             const targetId = item.getAttribute('data-target');
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.add('hidden');
-                section.classList.remove('active');
-            });
-            const targetSection = document.getElementById(targetId);
-            if(targetSection) {
-                targetSection.classList.remove('hidden');
-                targetSection.classList.add('active');
-            }
+            setActiveView(targetId);
             
             if (targetId === 'view-3d-map' && window.initThreeJS) window.initThreeJS();
             if (targetId === 'view-corporate' && window.initCorporateSuite) window.initCorporateSuite();
             if (targetId === 'view-hexasai' && window.initHexaSAI) window.initHexaSAI();
         });
     });
+}
+
+function setActiveView(targetId) {
+    if(!targetId) return;
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('active', item.getAttribute('data-target') === targetId);
+    });
+
+    document.querySelectorAll('.view-section').forEach(section => {
+        const isTarget = section.id === targetId;
+        section.classList.toggle('hidden', !isTarget);
+        section.classList.toggle('active', isTarget);
+    });
+
+    AppState.activeView = targetId;
 }
 
 // --- Modals ---
@@ -218,6 +226,42 @@ function initModals() {
         localStorage.setItem('foundr_gemini_key', key);
         localStorage.setItem('foundr_github_pat', pat);
         apiModal.classList.add('hidden');
+    });
+}
+
+function initPortfolioActions() {
+    const launchBtn = document.getElementById('btn-launch-new');
+    if(!launchBtn) return;
+
+    launchBtn.addEventListener('click', () => {
+        const promptArea = document.getElementById('builder-prompt');
+        if(promptArea && !promptArea.value.trim()) {
+            promptArea.value = BUSINESS_BUILDER_STARTER_PROMPT;
+        }
+
+        if(Array.isArray(AppState.portfolio)) {
+            AppState.portfolio.unshift({
+                id: (window.crypto && window.crypto.randomUUID) ? `d${window.crypto.randomUUID()}` : `d${Date.now()}-${Math.floor(Math.random() * 100000)}`,
+                name: 'New Venture Draft',
+                category: 'Business Builder',
+                status: 'Building',
+                arr: '$0',
+                progress: 5
+            });
+            renderPortfolio();
+        } else {
+            window.logToTerminal?.('Portfolio state unavailable. Opening Business Builder now, but this draft will not appear in Portfolio until state is restored.', 'system');
+        }
+
+        setActiveView('view-builder');
+
+        if(promptArea) {
+            promptArea.focus();
+            promptArea.setSelectionRange(promptArea.value.length, promptArea.value.length);
+        }
+        if(window.logToTerminal) {
+            window.logToTerminal('New business draft launched. Refine the seed idea, then click Start Autonomous Build.', 'system');
+        }
     });
 }
 
