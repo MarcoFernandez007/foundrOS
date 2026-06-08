@@ -61,7 +61,7 @@
             officeGroup.visible = false;
             camera.position.set(0, 15, 20);
             camera.lookAt(0, 0, 0);
-            e.target.classList.add('active-toggle');
+            e.currentTarget.classList.add('active-toggle');
         });
 
         window.addEventListener('resize', () => {
