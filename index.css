@@ -1313,25 +1313,290 @@ body {
     border-color: transparent;
 }
 
-.legal-grid {
+/* Legal AI Chat Workspace */
+.legal-chat-workspace {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 400px;
     gap: 1.5rem;
+    height: calc(100vh - 220px);
+    min-height: 500px;
 }
 
-.doc-list {
-    list-style: none;
-    margin-top: 1rem;
-}
-
-.doc-list li {
+.legal-chat-main {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+}
+
+.legal-chat-header {
+    display: flex;
     align-items: center;
-    padding: 0.75rem 0;
+    gap: 0.9rem;
+    padding: 1.1rem 1.4rem;
     border-bottom: 1px solid var(--panel-border);
+    color: var(--accent-lime);
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.legal-chat-header div { line-height: 1.3; }
+.legal-chat-header h3 { margin: 0; font-size: 1.05rem; color: var(--text-primary); }
+
+.legal-starter-chips {
+    padding: 0.9rem 1.4rem;
+    border-bottom: 1px solid var(--panel-border);
+    flex-shrink: 0;
+}
+
+.chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0.5rem;
+}
+
+.legal-chip {
+    background: rgba(57, 255, 20, 0.07);
+    border: 1px solid rgba(57, 255, 20, 0.22);
+    color: var(--accent-lime);
+    padding: 0.28rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    font-family: var(--font-sans);
+}
+
+.legal-chip:hover {
+    background: rgba(57, 255, 20, 0.18);
+    border-color: rgba(57, 255, 20, 0.5);
+}
+
+.legal-chat-transcript {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Chat message bubbles */
+.legal-msg {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+}
+
+.legal-msg.user {
+    flex-direction: row-reverse;
+}
+
+.legal-msg-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.legal-msg.user .legal-msg-avatar {
+    background: var(--btn-primary-bg);
+}
+
+.legal-msg.ai .legal-msg-avatar {
+    background: rgba(57, 255, 20, 0.12);
+    color: var(--accent-lime);
+    border: 1px solid rgba(57, 255, 20, 0.25);
+}
+
+.legal-msg-bubble {
+    max-width: 78%;
+    padding: 0.65rem 0.95rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.legal-msg.user .legal-msg-bubble {
+    background: var(--btn-primary-bg);
+    border-radius: 12px 2px 12px 12px;
+}
+
+.legal-msg.ai .legal-msg-bubble {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--panel-border);
+    border-radius: 2px 12px 12px 12px;
+}
+
+/* Typing animation */
+.legal-thinking {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 2px 0;
+}
+
+.legal-thinking span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-lime);
+    animation: legalDotPulse 1.3s infinite ease-in-out;
+    opacity: 0.25;
+}
+
+.legal-thinking span:nth-child(2) { animation-delay: 0.2s; }
+.legal-thinking span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes legalDotPulse {
+    0%, 80%, 100% { opacity: 0.2; transform: scale(0.75); }
+    40%           { opacity: 1;   transform: scale(1);    }
+}
+
+/* Composer */
+.legal-composer {
+    border-top: 1px solid var(--panel-border);
+    padding: 0.9rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+.legal-meta-row {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+.meta-select,
+.meta-input {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--panel-border);
+    color: var(--text-primary);
+    padding: 0.38rem 0.7rem;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-family: var(--font-sans);
+    flex: 1;
+    min-width: 110px;
+    transition: border-color 0.2s;
+}
+
+.meta-select:focus,
+.meta-input:focus {
+    outline: none;
+    border-color: rgba(57, 255, 20, 0.5);
+}
+
+.legal-input-row {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-end;
+}
+
+.legal-textarea {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--panel-border);
+    color: var(--text-primary);
+    padding: 0.65rem 0.9rem;
+    border-radius: 10px;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    resize: none;
+    height: 68px;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+}
+
+.legal-textarea:focus {
+    outline: none;
+    border-color: rgba(57, 255, 20, 0.5);
+}
+
+.legal-send-btn {
+    padding: 0 1rem;
+    border-radius: 10px;
+    height: 68px;
+    width: 50px;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* Document preview panel */
+.legal-preview-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+}
+
+.legal-preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 1.4rem;
+    border-bottom: 1px solid var(--panel-border);
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.legal-preview-header h4 {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.legal-preview-actions {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.legal-preview-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.2rem 1.4rem;
+}
+
+.legal-preview-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    gap: 0.5rem;
+}
+
+.legal-doc-text {
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: 0.75rem;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--text-primary);
+}
+
+/* Responsive: stack on narrow layouts */
+@media (max-width: 900px) {
+    .legal-chat-workspace {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    .legal-chat-main,
+    .legal-preview-panel {
+        height: 60vh;
+    }
 }
 
 /* 3D Map */

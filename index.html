@@ -542,32 +542,95 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Legal -->
+                        <!-- Legal AI Chat -->
                         <div id="corp-legal" class="corp-panel hidden">
-                            <div class="legal-grid">
-                                <div class="glass-panel">
-                                    <h3>Incorporation Wizard</h3>
-                                    <div class="input-group">
-                                        <label>Entity Name</label>
-                                        <input type="text" value="Autonomous AI Inc.">
+                            <div class="legal-chat-workspace">
+                                <!-- Left: Chat transcript + composer -->
+                                <div class="legal-chat-main glass-panel">
+                                    <div class="legal-chat-header">
+                                        <i class="fa-solid fa-scale-balanced"></i>
+                                        <div>
+                                            <h3>Legal AI</h3>
+                                            <span class="text-secondary text-sm">Generate legal documents in any language, for any jurisdiction</span>
+                                        </div>
                                     </div>
-                                    <div class="input-group">
-                                        <label>State</label>
-                                        <select>
-                                            <option>Delaware (C-Corp)</option>
-                                            <option>Wyoming (LLC)</option>
-                                        </select>
+
+                                    <!-- Starter chips -->
+                                    <div id="legal-starter-chips" class="legal-starter-chips">
+                                        <p class="text-secondary text-sm">Try an example:</p>
+                                        <div class="chip-row">
+                                            <button class="legal-chip" data-prompt="Draft a mutual NDA between two AI startups governed by California law.">NDA (California)</button>
+                                            <button class="legal-chip" data-prompt="Draft an employment agreement for a senior engineer at a UK PLC, compliant with UK employment law.">Employment Agreement (UK)</button>
+                                            <button class="legal-chip" data-prompt="Draft an Operating Agreement for a Wyoming LLC with two members, 50/50 split.">Operating Agreement (Wyoming LLC)</button>
+                                            <button class="legal-chip" data-prompt="Draft a GDPR-compliant Privacy Policy for a SaaS company serving EU customers.">Privacy Policy (GDPR)</button>
+                                            <button class="legal-chip" data-prompt="Draft a Shareholders Agreement for a Canadian corporation with three shareholders.">Shareholders Agreement (Canada)</button>
+                                            <button class="legal-chip" data-prompt="Redactar un contrato de servicios profesionales entre dos empresas en España, en español.">Contrato de Servicios (España)</button>
+                                        </div>
                                     </div>
-                                    <button class="btn btn-primary btn-block" id="btn-incorporate">File Articles of Organization</button>
-                                    <div id="incorp-status" class="mt-2 text-sm text-accent-cyan"></div>
+
+                                    <!-- Chat transcript -->
+                                    <div id="legal-chat-transcript" class="legal-chat-transcript"></div>
+
+                                    <!-- Composer -->
+                                    <div class="legal-composer">
+                                        <div class="legal-meta-row">
+                                            <select id="legal-doc-type" class="meta-select">
+                                                <option value="">Document Type</option>
+                                                <option>NDA</option>
+                                                <option>Employment Agreement</option>
+                                                <option>Operating Agreement</option>
+                                                <option>Shareholders Agreement</option>
+                                                <option>Service Agreement</option>
+                                                <option>Consulting Agreement</option>
+                                                <option>Privacy Policy</option>
+                                                <option>Term Sheet</option>
+                                                <option>IP Assignment</option>
+                                                <option>Articles of Incorporation</option>
+                                                <option>Partnership Agreement</option>
+                                                <option>Custom</option>
+                                            </select>
+                                            <select id="legal-company-type" class="meta-select">
+                                                <option value="">Company Type</option>
+                                                <option>LLC</option>
+                                                <option>C-Corp</option>
+                                                <option>S-Corp</option>
+                                                <option>Sole Proprietor</option>
+                                                <option>Nonprofit</option>
+                                                <option>Partnership</option>
+                                                <option>LLP</option>
+                                                <option>PLC</option>
+                                                <option>GmbH</option>
+                                                <option>SAS</option>
+                                                <option>SA</option>
+                                            </select>
+                                            <input id="legal-jurisdiction" type="text" class="meta-input" placeholder="Jurisdiction (e.g. Delaware, EU, UK, Canada)">
+                                            <input id="legal-language" type="text" class="meta-input" placeholder="Language (e.g. English, Spanish, French)">
+                                        </div>
+                                        <div class="legal-input-row">
+                                            <textarea id="legal-chat-input" class="legal-textarea" placeholder="Describe the legal document you need… (e.g. 'Draft an NDA between two AI companies in Spanish, governed by California law')"></textarea>
+                                            <button id="legal-send-btn" class="btn btn-primary legal-send-btn" title="Send">
+                                                <i class="fa-solid fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="glass-panel">
-                                    <h3>Legal Document Center</h3>
-                                    <ul class="doc-list">
-                                        <li><span><i class="fa-solid fa-file-signature"></i> standard_nda.pdf</span> <button class="btn btn-sm btn-outline dl-btn">Generate</button></li>
-                                        <li><span><i class="fa-solid fa-file-contract"></i> cofounder_equity_agreement.pdf</span> <button class="btn btn-sm btn-outline dl-btn">Generate</button></li>
-                                        <li><span><i class="fa-solid fa-file-shield"></i> ip_assignment.pdf</span> <button class="btn btn-sm btn-outline dl-btn">Generate</button></li>
-                                    </ul>
+
+                                <!-- Right: Document preview -->
+                                <div class="legal-preview-panel glass-panel">
+                                    <div class="legal-preview-header">
+                                        <h4><i class="fa-solid fa-file-lines"></i> Document Preview</h4>
+                                        <div class="legal-preview-actions hidden" id="legal-preview-actions">
+                                            <button class="btn btn-sm btn-outline" id="legal-copy-btn"><i class="fa-solid fa-copy"></i> Copy</button>
+                                            <button class="btn btn-sm btn-outline" id="legal-download-btn"><i class="fa-solid fa-download"></i> Download</button>
+                                            <button class="btn btn-sm btn-outline" id="legal-regen-btn"><i class="fa-solid fa-rotate"></i> Regenerate</button>
+                                        </div>
+                                    </div>
+                                    <div id="legal-preview-content" class="legal-preview-content">
+                                        <div class="legal-preview-empty">
+                                            <i class="fa-solid fa-scale-balanced" style="font-size:2.5rem; color:var(--text-secondary); margin-bottom:1rem; opacity:0.4;"></i>
+                                            <p class="text-secondary text-sm">Your generated document will appear here</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
