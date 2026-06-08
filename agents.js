@@ -34,6 +34,7 @@ const AutoresearchState = {
 };
 const MAX_MARKDOWN_UPDATES_PER_ITERATION = 3;
 const MAX_STATUS_ITEMS = 7;
+const AUTORESEARCH_MARKDOWN_PATH_ALLOWLIST = new Set(Object.keys(AutoresearchState.agentMarkdownFiles));
 
 const DefaultBusinessBuilderFlow = [
     {
@@ -214,8 +215,9 @@ Keep markdown updates concise and execution-focused.`;
         }
         if (Array.isArray(improvement.markdown_updates)) {
             improvement.markdown_updates.slice(0, MAX_MARKDOWN_UPDATES_PER_ITERATION).forEach(file => {
-                if (file?.path && file?.content) {
-                    AutoresearchState.agentMarkdownFiles[file.path] = file.content;
+                const path = typeof file?.path === 'string' ? file.path.trim() : '';
+                if (path.startsWith('agents/') && AUTORESEARCH_MARKDOWN_PATH_ALLOWLIST.has(path) && file?.content) {
+                    AutoresearchState.agentMarkdownFiles[path] = file.content;
                 }
             });
         }

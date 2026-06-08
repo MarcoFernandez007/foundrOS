@@ -61,7 +61,7 @@
             officeGroup.visible = false;
             camera.position.set(0, 15, 20);
             camera.lookAt(0, 0, 0);
-            e.target.classList.add('active-toggle');
+            e.currentTarget.classList.add('active-toggle');
             document.getElementById('btn-toggle-office').classList.remove('active-toggle');
         });
 
@@ -71,7 +71,7 @@
             officeGroup.visible = true;
             camera.position.set(0, 9, 16);
             camera.lookAt(0, 0, 0);
-            e.target.classList.add('active-toggle');
+            e.currentTarget.classList.add('active-toggle');
             document.getElementById('btn-toggle-rts').classList.remove('active-toggle');
         });
 

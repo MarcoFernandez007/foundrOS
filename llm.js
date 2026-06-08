@@ -2,6 +2,11 @@
 
 const LLMEngine = {
     async generateContent(prompt, systemInstruction = null, responseSchema = null) {
+        const normalizeError = (error) => {
+            if (error instanceof Error) return error;
+            if (typeof error === 'string') return new Error(error);
+            return new Error(`Non-Error thrown: ${String(error)}`);
+        };
         const apiKey = AppState.apiKeys.gemini;
         
         if (!apiKey) {
@@ -57,7 +62,7 @@ const LLMEngine = {
                 }
                 throw new Error(`Invalid response structure from ${model}`);
             } catch (error) {
-                lastError = error;
+                lastError = normalizeError(error);
             }
         }
 
