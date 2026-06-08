@@ -7,6 +7,7 @@
     const OFFICE_WAVE_AMPLITUDE = 0.08;
     const OFFICE_PERSON_ROTATION_SPEED = 0.0025;
     const OFFICE_GROUP_ROTATION_SPEED = 0.001;
+    const WORLD_MODEL_URL = 'https://huggingface.co/spaces/FINAL-Bench/world-model';
 
     let scene, camera, renderer;
     let rtsGroup, officeGroup;
@@ -14,6 +15,17 @@
     let packets = [];
     let officePeople = [];
     let isRTSMode = true;
+
+    function configureWorldModelLink() {
+        const worldModelLink = document.getElementById('btn-world-model');
+        if (!worldModelLink) return;
+
+        worldModelLink.href = WORLD_MODEL_URL;
+        worldModelLink.target = '_blank';
+        worldModelLink.rel = 'noopener noreferrer';
+    }
+
+    configureWorldModelLink();
 
     window.initThreeJS = function() {
         const container = document.getElementById('three-canvas-container');

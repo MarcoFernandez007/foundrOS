@@ -597,8 +597,8 @@ body {
 }
 
 .api-key-clarification {
-    color: var(--text-secondary);
-    font-size: 0.72rem;
+    color: var(--text-primary);
+    font-size: 0.85rem;
     line-height: 1.35;
     margin: 0;
     text-align: right;
