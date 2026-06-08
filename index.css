@@ -584,7 +584,24 @@ body {
 
 .header-actions {
     display: flex;
+    align-items: flex-start;
     gap: 1rem;
+}
+
+.api-key-action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    max-width: 280px;
+}
+
+.api-key-clarification {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    line-height: 1.35;
+    margin: 0;
+    text-align: right;
 }
 
 /* Views Container */

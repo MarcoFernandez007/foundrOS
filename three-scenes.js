@@ -62,17 +62,6 @@
             camera.position.set(0, 15, 20);
             camera.lookAt(0, 0, 0);
             e.target.classList.add('active-toggle');
-            document.getElementById('btn-toggle-office').classList.remove('active-toggle');
-        });
-
-        document.getElementById('btn-toggle-office')?.addEventListener('click', (e) => {
-            isRTSMode = false;
-            rtsGroup.visible = false;
-            officeGroup.visible = true;
-            camera.position.set(0, 9, 16);
-            camera.lookAt(0, 0, 0);
-            e.target.classList.add('active-toggle');
-            document.getElementById('btn-toggle-rts').classList.remove('active-toggle');
         });
 
         window.addEventListener('resize', () => {
