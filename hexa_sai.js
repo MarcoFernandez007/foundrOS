@@ -86,7 +86,7 @@ window.triggerHexaCycle = async function(originalPrompt, generatedCode) {
     hexaIterationCount++;
 
     if(window.logToTerminal) {
-        window.logToTerminal(`[Iter ${hexaIterationCount}] Analyzing Builder V2 output quality...`, 'HexaSAI');
+        window.logToTerminal(`[Iter ${hexaIterationCount}] Analyzing Business Builder output quality...`, 'HexaSAI');
     }
 
     try {

@@ -28,7 +28,7 @@
         <header class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title">The First Zero-Human<br><span class="text-gradient">Autonomous Startup OS</span></h1>
-                <p class="hero-subtitle">Turn an idea into a fully incorporated, revenue-generating business with a network of 14 specialized AI agents working around the clock.</p>
+                <p class="hero-subtitle">Turn an idea into a fully incorporated, revenue-generating business with a network of 17 specialized AI agents working around the clock.</p>
                 <div class="hero-actions">
                     <button class="btn btn-primary btn-large" id="btn-hero-start">Initialize OS <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
@@ -43,7 +43,7 @@
             <div class="features-grid">
                 <div class="feature-card glass-panel">
                     <i class="fa-solid fa-users-gear feature-icon text-accent-purple"></i>
-                    <h3>14 Coordinated Agents</h3>
+                    <h3>17 Coordinated Agents</h3>
                     <p>A full C-suite in the cloud. From engineering to marketing, the Gstack pipeline orchestrates a dedicated workforce to build your vision.</p>
                 </div>
                 <div class="feature-card glass-panel">
@@ -124,7 +124,7 @@
                     <i class="fa-solid fa-gamepad"></i> <span>Command Center</span>
                 </li>
                 <li class="nav-item" data-target="view-builder">
-                    <i class="fa-solid fa-hammer"></i> <span>Builder v2</span>
+                    <i class="fa-solid fa-hammer"></i> <span>Business Builder</span>
                 </li>
                 <li class="nav-item" data-target="view-coscientist">
                     <i class="fa-solid fa-flask"></i> <span>Co-Scientist</span>
@@ -136,14 +136,14 @@
                     <i class="fa-solid fa-building-columns"></i> <span>Corporate</span>
                 </li>
                 <li class="nav-item" data-target="view-3d-map">
-                    <i class="fa-solid fa-network-wired"></i> <span>3D Map & Claw</span>
+                    <i class="fa-solid fa-network-wired"></i> <span>3D Map & Agent Office</span>
                 </li>
             </ul>
 
             <div class="sidebar-footer">
                 <div class="api-status">
                     <i class="fa-solid fa-bolt status-dot healthy"></i>
-                    <span>Gemini 3.1 Pro</span>
+                    <span>Gemini 2.5 Flash</span>
                 </div>
                 <div class="theme-toggle" id="theme-toggle">
                     <i class="fa-solid fa-sun" id="theme-icon"></i>
@@ -171,7 +171,7 @@
                     </div>
                     <div class="metric-badge">
                         <span class="metric-label">Active Agents</span>
-                        <span class="metric-value text-accent-purple">14/14</span>
+                        <span class="metric-value text-accent-purple">17/17</span>
                     </div>
                     <div class="metric-badge">
                         <span class="metric-label">Completed Tasks</span>
@@ -213,7 +213,7 @@
                                     <i class="fa-brands fa-y-combinator text-accent-red" style="font-size: 3rem; margin-bottom: 1rem;"></i>
                                     <h3>Gstack YC Implementation</h3>
                                     <p class="text-sm text-secondary mt-2">Optimal YC combinator business implementation via specialized AI business agents.</p>
-                                    <div class="mt-4"><span class="badge badge-purple">14 Agents Active</span></div>
+                                    <div class="mt-4"><span class="badge badge-purple">17 Agents Active</span></div>
                                 </div>
                             </div>
                         </div>
@@ -294,7 +294,7 @@
                                     <h4>Done <span class="kanban-count">1</span></h4>
                                     <div class="kanban-cards" data-col="done">
                                         <div class="kanban-card glass-panel" draggable="true">
-                                            <div class="kanban-card-title">Gemini 3.1 Pro Integration</div>
+                                            <div class="kanban-card-title">Gemini 2.5 Flash Integration</div>
                                             <div class="kanban-card-footer">
                                                 <span class="assignee-badge type-agent"><i class="fa-solid fa-robot"></i> @System</span>
                                             </div>
@@ -316,7 +316,7 @@
                                     </div>
                                 </div>
                                 <div class="terminal-body" id="terminal-output">
-                                    <p><span class="text-accent-cyan">system@foundrOS</span>:~$ initializing multi-agent network with Gemini 3.1 Pro...</p>
+                                    <p><span class="text-accent-cyan">system@foundrOS</span>:~$ initializing multi-agent network with Gemini 2.5 Flash...</p>
                                 </div>
                                 <div class="terminal-input-row">
                                     <span class="text-accent-cyan">founder@foundrOS</span>:~$ 
@@ -379,11 +379,12 @@
                     </div>
                 </section>
 
-                <!-- VIEW: Builder v2 -->
+                <!-- VIEW: Business Builder -->
                 <section id="view-builder" class="view-section hidden">
                     <div class="builder-layout">
                         <div class="builder-sidebar glass-panel">
-                            <h3>Business Builder v2</h3>
+                            <h3>Business Builder</h3>
+                            <p class="text-sm text-secondary mt-2">Paperclip orchestration flow: Discovery → Product & Build → Go-To-Market → Validation & Release.</p>
                             <div class="input-group">
                                 <label>Seed Idea</label>
                                 <textarea id="builder-prompt" placeholder="Describe the startup idea..."></textarea>
@@ -579,7 +580,7 @@
                         <h2>Agent Visualizations</h2>
                         <div class="view-toggles">
                             <button class="btn btn-sm btn-primary active-toggle" id="btn-toggle-rts">RTS Orchestration Map</button>
-                            <button class="btn btn-sm btn-outline" id="btn-toggle-claw">Claw3D Office Scene</button>
+                            <button class="btn btn-sm btn-outline" id="btn-toggle-office">Agent Office Scene</button>
                         </div>
                     </div>
                     <div class="glass-panel three-container-panel">
@@ -671,6 +672,7 @@
     <script src="llm.js"></script>
     <script src="hexa_sai.js"></script>
     <script src="corporate.js"></script>
+    <script src="paperclip_orchestrator.js"></script>
     <script src="agents.js"></script>
     <script src="co_scientist.js"></script>
     <script src="three-scenes.js"></script>
