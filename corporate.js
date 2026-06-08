@@ -36,8 +36,8 @@ function initFinanceChart() {
                 {
                     label: 'Revenue (ARR)',
                     data: [120000, 350000, 1200000, 3500000, 8000000],
-                    backgroundColor: 'rgba(0, 242, 254, 0.7)',
-                    borderColor: '#00F2FE',
+                    backgroundColor: 'rgba(30, 58, 138, 0.7)',
+                    borderColor: '#1E3A8A',
                     borderWidth: 1
                 },
                 {

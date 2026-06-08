@@ -10,13 +10,15 @@ const CommandCenter = {
         { id: 'design', name: 'Design Agent', icon: 'fa-pen-nib', x: 50, y: 80, color: 'var(--accent-cyan)', status: 'Drafting', energy: 75 },
         { id: 'hr', name: 'HR Agent', icon: 'fa-users', x: 90, y: 90, color: 'var(--accent-red)', status: 'Idle', energy: 100 },
         { id: 'sales', name: 'Sales Agent', icon: 'fa-handshake', x: 30, y: 10, color: 'var(--accent-lime)', status: 'Pitching', energy: 40 },
-        // ... (Adding a few more to populate the field)
         { id: 'data', name: 'Data Agent', icon: 'fa-database', x: 60, y: 40, color: 'var(--accent-cyan)', status: 'Analyzing', energy: 95 },
         { id: 'devops', name: 'DevOps Agent', icon: 'fa-server', x: 85, y: 35, color: 'var(--accent-purple)', status: 'Deploying', energy: 50 },
         { id: 'qa', name: 'QA Agent', icon: 'fa-bug', x: 25, y: 85, color: 'var(--accent-red)', status: 'Testing', energy: 80 },
         { id: 'support', name: 'Support Agent', icon: 'fa-headset', x: 55, y: 15, color: 'var(--accent-lime)', status: 'Idle', energy: 100 },
         { id: 'product', name: 'Product Agent', icon: 'fa-box-open', x: 15, y: 50, color: 'var(--accent-cyan)', status: 'Planning', energy: 90 },
-        { id: 'growth', name: 'Growth Agent', icon: 'fa-rocket', x: 75, y: 75, color: 'var(--accent-purple)', status: 'Optimizing', energy: 70 }
+        { id: 'growth', name: 'Growth Agent', icon: 'fa-rocket', x: 75, y: 75, color: 'var(--accent-purple)', status: 'Optimizing', energy: 70 },
+        { id: 'market', name: 'Market Intel Agent', icon: 'fa-chart-line', x: 45, y: 22, color: 'var(--accent-cyan)', status: 'Signal Mining', energy: 88 },
+        { id: 'brand', name: 'Brand Agent', icon: 'fa-feather-pointed', x: 65, y: 88, color: 'var(--accent-red)', status: 'Messaging', energy: 84 },
+        { id: 'strategy', name: 'Strategy Agent', icon: 'fa-chess-queen', x: 12, y: 28, color: 'var(--accent-purple)', status: 'Positioning', energy: 92 }
     ],
     selectedAgent: null,
 

@@ -8,9 +8,6 @@ const LLMEngine = {
             throw new Error('Gemini API key is missing. Please configure it in the API settings.');
         }
 
-        const model = 'gemini-3.1-pro';
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-
         const requestBody = {
             contents: [{ parts: [{ text: prompt }] }]
         };
@@ -32,33 +29,40 @@ const LLMEngine = {
              };
         }
 
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
-            });
+        const preferredModels = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+        let lastError = null;
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error?.message || 'API request failed');
-            }
+        for (const model of preferredModels) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
 
-            const data = await response.json();
-            
-            if (data.candidates && data.candidates[0].content.parts[0].text) {
-                const text = data.candidates[0].content.parts[0].text;
-                if (responseSchema) {
-                    return JSON.parse(text);
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error?.message || `API request failed on ${model}`);
                 }
-                return text;
-            } else {
-                throw new Error('Invalid response structure from Gemini API');
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+                    const text = data.candidates[0].content.parts[0].text;
+                    if (responseSchema) {
+                        return JSON.parse(text);
+                    }
+                    return text;
+                }
+                throw new Error(`Invalid response structure from ${model}`);
+            } catch (error) {
+                lastError = error;
             }
-        } catch (error) {
-            console.error('LLMEngine Error:', error);
-            throw error;
         }
+
+        console.error('LLMEngine Error:', lastError);
+        throw lastError || new Error('Gemini request failed for all fallback models.');
     }
 };
 

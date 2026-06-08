@@ -1,12 +1,18 @@
-// three-scenes.js - Three.js Visualizations (RTS Map & Claw3D Office)
+// three-scenes.js - Three.js Visualizations (RTS Map & Agent Office Scene)
 
 (function() {
-    // IIFE scoping to prevent collision bugs (Bug: 3D visualization fixed)
-    
+    const OFFICE_VISIBLE_AGENT_COUNT = 17;
+    const OFFICE_ANIMATION_TIME_SCALE = 0.001;
+    const OFFICE_WAVE_FREQUENCY = 2;
+    const OFFICE_WAVE_AMPLITUDE = 0.08;
+    const OFFICE_PERSON_ROTATION_SPEED = 0.0025;
+    const OFFICE_GROUP_ROTATION_SPEED = 0.001;
+
     let scene, camera, renderer;
-    let rtsGroup, clawGroup;
+    let rtsGroup, officeGroup;
     let animationId;
     let packets = [];
+    let officePeople = [];
     let isRTSMode = true;
 
     window.initThreeJS = function() {
@@ -40,30 +46,30 @@
 
         // Groups for switching views
         rtsGroup = new THREE.Group();
-        clawGroup = new THREE.Group();
+        officeGroup = new THREE.Group();
         scene.add(rtsGroup);
-        scene.add(clawGroup);
-        clawGroup.visible = false;
+        scene.add(officeGroup);
+        officeGroup.visible = false;
 
         buildRTSMap();
-        buildClawOffice();
+        buildAgentOffice();
 
         // Event Listeners for Toggles
         document.getElementById('btn-toggle-rts')?.addEventListener('click', (e) => {
             isRTSMode = true;
             rtsGroup.visible = true;
-            clawGroup.visible = false;
+            officeGroup.visible = false;
             camera.position.set(0, 15, 20);
             camera.lookAt(0, 0, 0);
             e.target.classList.add('active-toggle');
-            document.getElementById('btn-toggle-claw').classList.remove('active-toggle');
+            document.getElementById('btn-toggle-office').classList.remove('active-toggle');
         });
 
-        document.getElementById('btn-toggle-claw')?.addEventListener('click', (e) => {
+        document.getElementById('btn-toggle-office')?.addEventListener('click', (e) => {
             isRTSMode = false;
             rtsGroup.visible = false;
-            clawGroup.visible = true;
-            camera.position.set(0, 8, 15);
+            officeGroup.visible = true;
+            camera.position.set(0, 9, 16);
             camera.lookAt(0, 0, 0);
             e.target.classList.add('active-toggle');
             document.getElementById('btn-toggle-rts').classList.remove('active-toggle');
@@ -83,15 +89,15 @@
 
     function buildRTSMap() {
         // Grid helper
-        const grid = new THREE.GridHelper(30, 30, 0x00F2FE, 0x333333);
+        const grid = new THREE.GridHelper(30, 30, 0x1E3A8A, 0x333333);
         grid.position.y = -0.5;
         rtsGroup.add(grid);
 
         const nodes = [
             { pos: new THREE.Vector3(0, 0, -5), color: 0xFF2E93, name: 'CEO' },
-            { pos: new THREE.Vector3(-6, 0, 0), color: 0x00F2FE, name: 'Dev' },
+            { pos: new THREE.Vector3(-6, 0, 0), color: 0x1E3A8A, name: 'Dev' },
             { pos: new THREE.Vector3(6, 0, 0), color: 0x39FF14, name: 'Mkt' },
-            { pos: new THREE.Vector3(0, 0, 5), color: 0x7F00FF, name: 'Hexa' }
+            { pos: new THREE.Vector3(0, 0, 5), color: 0x1D4ED8, name: 'Hexa' }
         ];
 
         const nodeMaterial = new THREE.MeshPhongMaterial({ shininess: 100 });
@@ -127,35 +133,115 @@
         packets.push({ mesh, start: start.clone(), end: end.clone(), progress: Math.random() });
     }
 
-    function buildClawOffice() {
-        // Simple floor
-        const floorGeo = new THREE.PlaneGeometry(20, 20);
-        const floorMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
+    function buildAgentOffice() {
+        // Agent Office-inspired virtual workspace with FoundrOS agents represented as animated people.
+        const floorGeo = new THREE.PlaneGeometry(24, 24);
+        const floorMat = new THREE.MeshStandardMaterial({ color: 0x1f2937 });
         const floor = new THREE.Mesh(floorGeo, floorMat);
         floor.rotation.x = -Math.PI / 2;
         floor.position.y = -0.5;
-        clawGroup.add(floor);
+        officeGroup.add(floor);
 
-        // Desks (Boxes)
-        for(let i=0; i<4; i++) {
-            const deskGeo = new THREE.BoxGeometry(3, 1, 1.5);
-            const deskMat = new THREE.MeshStandardMaterial({ color: 0x444444 });
+        // Room shell
+        const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x111827 });
+        const backWall = new THREE.Mesh(new THREE.BoxGeometry(24, 6, 0.4), wallMaterial);
+        backWall.position.set(0, 2.5, -12);
+        officeGroup.add(backWall);
+        const sideWallL = new THREE.Mesh(new THREE.BoxGeometry(0.4, 6, 24), wallMaterial);
+        sideWallL.position.set(-12, 2.5, 0);
+        officeGroup.add(sideWallL);
+        const sideWallR = sideWallL.clone();
+        sideWallR.position.set(12, 2.5, 0);
+        officeGroup.add(sideWallR);
+
+        const defaultRoster = (typeof AgentTemplates !== 'undefined' && Array.isArray(AgentTemplates))
+            ? AgentTemplates.map(agent => agent.name)
+            : Array.from({ length: OFFICE_VISIBLE_AGENT_COUNT }, (_, i) => `FoundrOS Agent ${i + 1}`);
+        const agentNames = Array.isArray(window.BusinessBuilderAgentRoster) && window.BusinessBuilderAgentRoster.length
+            ? window.BusinessBuilderAgentRoster.slice(0, OFFICE_VISIBLE_AGENT_COUNT)
+            : defaultRoster.slice(0, OFFICE_VISIBLE_AGENT_COUNT);
+
+        officePeople = [];
+        const deskCount = agentNames.length;
+
+        for(let i = 0; i < deskCount; i++) {
+            const deskGeo = new THREE.BoxGeometry(2.6, 0.8, 1.3);
+            const deskMat = new THREE.MeshStandardMaterial({ color: 0x374151 });
             const desk = new THREE.Mesh(deskGeo, deskMat);
             
-            const angle = (i / 4) * Math.PI * 2;
-            const radius = 5;
+            const angle = (i / deskCount) * Math.PI * 2;
+            const radius = 7;
             desk.position.set(Math.cos(angle)*radius, 0, Math.sin(angle)*radius);
             desk.lookAt(0,0,0);
             
-            // Computer monitor
             const monitorGeo = new THREE.BoxGeometry(1.2, 0.8, 0.1);
-            const monitorMat = new THREE.MeshBasicMaterial({ color: 0x00F2FE }); // glowing screen
+            const monitorMat = new THREE.MeshBasicMaterial({ color: 0x1E3A8A });
             const monitor = new THREE.Mesh(monitorGeo, monitorMat);
             monitor.position.set(0, 0.9, 0);
             desk.add(monitor);
 
-            clawGroup.add(desk);
+            officeGroup.add(desk);
+
+            const person = createOfficePerson(agentNames[i], i);
+            person.group.position.set(Math.cos(angle) * (radius - 1.6), 0, Math.sin(angle) * (radius - 1.6));
+            person.group.lookAt(0, 0.7, 0);
+            officeGroup.add(person.group);
+            officePeople.push(person);
         }
+    }
+
+    function createOfficePerson(name, index) {
+        const group = new THREE.Group();
+        const palette = [0x1D4ED8, 0xFF2E93, 0x39FF14, 0x2563EB];
+        const bodyColor = palette[index % palette.length];
+
+        const body = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.28, 0.3, 0.8, 10),
+            new THREE.MeshStandardMaterial({ color: bodyColor })
+        );
+        body.position.y = 0.45;
+        group.add(body);
+
+        const head = new THREE.Mesh(
+            new THREE.SphereGeometry(0.22, 16, 16),
+            new THREE.MeshStandardMaterial({ color: 0xf5d0a9 })
+        );
+        head.position.y = 0.95;
+        group.add(head);
+
+        const badge = new THREE.Mesh(
+            new THREE.PlaneGeometry(1.8, 0.35),
+            new THREE.MeshBasicMaterial({ color: 0x111827, transparent: true, opacity: 0.9, side: THREE.DoubleSide })
+        );
+        badge.position.y = 1.45;
+        group.add(badge);
+
+        const label = createNameSprite(name);
+        label.position.y = 1.45;
+        group.add(label);
+
+        return {
+            group,
+            baseY: 0,
+            waveOffset: Math.random() * Math.PI * 2
+        };
+    }
+
+    function createNameSprite(text) {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = 512;
+        canvas.height = 128;
+        context.fillStyle = '#E5E7EB';
+        context.font = '42px Outfit, Arial';
+        context.textAlign = 'center';
+        context.fillText(text, canvas.width / 2, 80);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+        const sprite = new THREE.Sprite(material);
+        sprite.scale.set(2.5, 0.65, 1);
+        return sprite;
     }
 
     function animate() {
@@ -171,7 +257,12 @@
                 p.mesh.position.lerpVectors(p.start, p.end, p.progress);
             });
         } else {
-            clawGroup.rotation.y += 0.003;
+            officePeople.forEach((agent, index) => {
+                const t = performance.now() * OFFICE_ANIMATION_TIME_SCALE + agent.waveOffset;
+                agent.group.position.y = agent.baseY + Math.sin(t * OFFICE_WAVE_FREQUENCY + index) * OFFICE_WAVE_AMPLITUDE;
+                agent.group.rotation.y += OFFICE_PERSON_ROTATION_SPEED;
+            });
+            officeGroup.rotation.y += OFFICE_GROUP_ROTATION_SPEED;
         }
 
         renderer.render(scene, camera);

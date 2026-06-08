@@ -8,13 +8,13 @@
     --text-primary: #FFFFFF;
     --text-secondary: #A1A1AA;
     
-    --accent-cyan: #00F2FE;
-    --accent-purple: #7F00FF;
+    --accent-cyan: #1E3A8A;
+    --accent-purple: #1D4ED8;
     --accent-lime: #39FF14;
     --accent-red: #FF2E93;
     
     --btn-primary-bg: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
-    --btn-primary-hover: linear-gradient(135deg, #9124ff, #2cf4ff);
+    --btn-primary-hover: linear-gradient(135deg, #1e40af, #2563eb);
     
     --sidebar-width: 260px;
     --font-sans: 'Outfit', sans-serif;
@@ -95,7 +95,7 @@ body {
 .btn-primary:hover {
     background: var(--btn-primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(127, 0, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.45);
 }
 
 .btn-outline {
@@ -1380,7 +1380,7 @@ body {
     width: 10px; height: 10px; border-radius: 50%;
 }
 .legend-dot.ceo { background: #FF2E93; }
-.legend-dot.dev { background: #00F2FE; }
+.legend-dot.dev { background: #1E3A8A; }
 .legend-dot.mkt { background: #39FF14; }
 
 /* Modals */
