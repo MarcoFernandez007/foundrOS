@@ -182,9 +182,12 @@
                     <button class="btn btn-primary" id="btn-stripe-billing">
                         <i class="fa-solid fa-credit-card"></i> Billing
                     </button>
-                    <button class="btn btn-outline" id="btn-api-settings">
-                        <i class="fa-solid fa-key"></i> API Keys
-                    </button>
+                    <div class="api-key-action">
+                        <button class="btn btn-outline" id="btn-api-settings">
+                            <i class="fa-solid fa-key"></i> API Keys
+                        </button>
+                        <p class="api-key-clarification">Generate a free Gemini API key in Google AI Studio with a generous free tier, then paste it here.</p>
+                    </div>
                 </div>
             </header>
 
@@ -643,7 +646,9 @@
                         <h2>Agent Visualizations</h2>
                         <div class="view-toggles">
                             <button class="btn btn-sm btn-primary active-toggle" id="btn-toggle-rts">RTS Orchestration Map</button>
-                            <button class="btn btn-sm btn-outline" id="btn-toggle-office">Agent Office Scene</button>
+                            <a class="btn btn-sm btn-outline" id="btn-world-model" href="https://huggingface.co/spaces/FINAL-Bench/world-model" rel="noopener noreferrer">
+                                <i class="fa-solid fa-cube"></i> World Model Space
+                            </a>
                         </div>
                     </div>
                     <div class="glass-panel three-container-panel">
