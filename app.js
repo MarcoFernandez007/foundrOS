@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initLandingPage();
     initAuth();
     initNavigation();
+    initPortfolioActions();
     initModals();
     renderPortfolio();
     initKanban();
@@ -166,25 +167,30 @@ function initNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', () => {
-            navItems.forEach(n => n.classList.remove('active'));
-            item.classList.add('active');
-
             const targetId = item.getAttribute('data-target');
-            document.querySelectorAll('.view-section').forEach(section => {
-                section.classList.add('hidden');
-                section.classList.remove('active');
-            });
-            const targetSection = document.getElementById(targetId);
-            if(targetSection) {
-                targetSection.classList.remove('hidden');
-                targetSection.classList.add('active');
-            }
+            setActiveView(targetId);
             
             if (targetId === 'view-3d-map' && window.initThreeJS) window.initThreeJS();
             if (targetId === 'view-corporate' && window.initCorporateSuite) window.initCorporateSuite();
             if (targetId === 'view-hexasai' && window.initHexaSAI) window.initHexaSAI();
         });
     });
+}
+
+function setActiveView(targetId) {
+    if(!targetId) return;
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('active', item.getAttribute('data-target') === targetId);
+    });
+
+    document.querySelectorAll('.view-section').forEach(section => {
+        const isTarget = section.id === targetId;
+        section.classList.toggle('hidden', !isTarget);
+        section.classList.toggle('active', isTarget);
+    });
+
+    AppState.activeView = targetId;
 }
 
 // --- Modals ---
@@ -218,6 +224,61 @@ function initModals() {
         localStorage.setItem('foundr_gemini_key', key);
         localStorage.setItem('foundr_github_pat', pat);
         apiModal.classList.add('hidden');
+    });
+}
+
+function initPortfolioActions() {
+    const launchBtn = document.getElementById('btn-launch-new');
+    if(!launchBtn) return;
+
+    launchBtn.addEventListener('click', () => {
+        const starterPrompt = 'Build a B2B AI workflow automation startup for small operations teams. Include MVP, monetization, and launch KPIs.';
+        const promptArea = document.getElementById('builder-prompt');
+        if(promptArea && !promptArea.value.trim()) {
+            promptArea.value = starterPrompt;
+        }
+
+        if(Array.isArray(AppState.portfolio)) {
+            AppState.portfolio.unshift({
+                id: `d${Date.now()}`,
+                name: 'New Venture Draft',
+                category: 'Business Builder',
+                status: 'Building',
+                arr: '$0',
+                progress: 5
+            });
+            renderPortfolio();
+        } else {
+            const grid = document.getElementById('portfolio-grid');
+            if(grid) {
+                grid.insertAdjacentHTML('afterbegin', `
+                    <div class="portfolio-card glass-panel">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <h3>New Venture Draft</h3>
+                            <span class="badge" style="background: rgba(255,255,255,0.1)">Business Builder</span>
+                        </div>
+                        <div class="mt-4">
+                            <p class="text-sm text-secondary">Status: <span class="text-yellow">Building</span></p>
+                            <p class="text-sm text-secondary">ARR: <span class="text-primary font-bold">$0</span></p>
+                        </div>
+                        <div class="mt-4" style="height: 4px; background: var(--panel-border); border-radius: 2px;">
+                            <div style="height: 100%; width: 5%; background: var(--accent-cyan);"></div>
+                        </div>
+                        <button class="btn btn-sm btn-outline btn-block mt-4">Manage Engine</button>
+                    </div>
+                `);
+            }
+        }
+
+        setActiveView('view-builder');
+
+        if(promptArea) {
+            promptArea.focus();
+            promptArea.setSelectionRange(promptArea.value.length, promptArea.value.length);
+        }
+        if(window.logToTerminal) {
+            window.logToTerminal('New business draft launched. Refine the seed idea, then click Start Autonomous Build.', 'system');
+        }
     });
 }
 
