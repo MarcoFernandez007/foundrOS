@@ -25,7 +25,11 @@
         worldModelLink.rel = 'noopener noreferrer';
     }
 
-    configureWorldModelLink();
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', configureWorldModelLink);
+    } else {
+        configureWorldModelLink();
+    }
 
     window.initThreeJS = function() {
         const container = document.getElementById('three-canvas-container');
