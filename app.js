@@ -241,7 +241,7 @@ function initPortfolioActions() {
 
         if(Array.isArray(AppState.portfolio)) {
             AppState.portfolio.unshift({
-                id: `d${Date.now()}-${Math.floor(Math.random() * 100000)}`,
+                id: (window.crypto && window.crypto.randomUUID) ? `d${window.crypto.randomUUID()}` : `d${Date.now()}-${Math.floor(Math.random() * 100000)}`,
                 name: 'New Venture Draft',
                 category: 'Business Builder',
                 status: 'Building',
@@ -250,7 +250,7 @@ function initPortfolioActions() {
             });
             renderPortfolio();
         } else {
-            window.logToTerminal?.('Portfolio state unavailable, opening Business Builder without draft persistence.', 'system');
+            window.logToTerminal?.('Portfolio state unavailable. Opening Business Builder now, but this draft will not appear in Portfolio until state is restored.', 'system');
         }
 
         setActiveView('view-builder');
