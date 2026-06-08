@@ -216,7 +216,7 @@ Keep markdown updates concise and execution-focused.`;
         if (Array.isArray(improvement.markdown_updates)) {
             improvement.markdown_updates.slice(0, MAX_MARKDOWN_UPDATES_PER_ITERATION).forEach(file => {
                 const path = typeof file?.path === 'string' ? file.path.trim() : '';
-                if (path.startsWith('agents/') && AUTORESEARCH_MARKDOWN_PATH_ALLOWLIST.has(path) && file?.content) {
+                if (AUTORESEARCH_MARKDOWN_PATH_ALLOWLIST.has(path) && file?.content) {
                     AutoresearchState.agentMarkdownFiles[path] = file.content;
                 }
             });
