@@ -574,7 +574,7 @@
                                     <!-- Composer -->
                                     <div class="legal-composer">
                                         <div class="legal-meta-row">
-                                            <select id="legal-doc-type" class="meta-select">
+                                            <select id="legal-doc-type" class="meta-select" aria-label="Document type">
                                                 <option value="">Document Type</option>
                                                 <option>NDA</option>
                                                 <option>Employment Agreement</option>
@@ -589,7 +589,7 @@
                                                 <option>Partnership Agreement</option>
                                                 <option>Custom</option>
                                             </select>
-                                            <select id="legal-company-type" class="meta-select">
+                                            <select id="legal-company-type" class="meta-select" aria-label="Company type">
                                                 <option value="">Company Type</option>
                                                 <option>LLC</option>
                                                 <option>C-Corp</option>
@@ -603,11 +603,11 @@
                                                 <option>SAS</option>
                                                 <option>SA</option>
                                             </select>
-                                            <input id="legal-jurisdiction" type="text" class="meta-input" placeholder="Jurisdiction (e.g. Delaware, EU, UK, Canada)">
-                                            <input id="legal-language" type="text" class="meta-input" placeholder="Language (e.g. English, Spanish, French)">
+                                            <input id="legal-jurisdiction" type="text" class="meta-input" placeholder="Jurisdiction (e.g. Delaware, EU, UK, Canada)" aria-label="Jurisdiction">
+                                            <input id="legal-language" type="text" class="meta-input" placeholder="Language (e.g. English, Spanish, French)" aria-label="Output language">
                                         </div>
                                         <div class="legal-input-row">
-                                            <textarea id="legal-chat-input" class="legal-textarea" placeholder="Describe the legal document you need… (e.g. 'Draft an NDA between two AI companies in Spanish, governed by California law')"></textarea>
+                                            <textarea id="legal-chat-input" class="legal-textarea" placeholder="Describe the legal document you need… (e.g. 'Draft an NDA between two AI companies in Spanish, governed by California law')" aria-label="Legal document request"></textarea>
                                             <button id="legal-send-btn" class="btn btn-primary legal-send-btn" title="Send">
                                                 <i class="fa-solid fa-paper-plane"></i>
                                             </button>
