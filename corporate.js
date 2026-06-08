@@ -6,8 +6,7 @@ window.initCorporateSuite = function() {
     initCorpTabs();
     initFinanceChart();
     renderCapTable();
-    initIncorporationWizard();
-    initLegalDocs();
+    initLegalChat();
 };
 
 function initCorpTabs() {
@@ -111,93 +110,197 @@ function renderCapTable() {
     });
 }
 
-function initIncorporationWizard() {
-    const btn = document.getElementById('btn-incorporate');
-    const status = document.getElementById('incorp-status');
-    if(!btn) return;
+function initLegalChat() {
+    const transcript = document.getElementById('legal-chat-transcript');
+    const input = document.getElementById('legal-chat-input');
+    const sendBtn = document.getElementById('legal-send-btn');
+    const starterChips = document.getElementById('legal-starter-chips');
+    const previewContent = document.getElementById('legal-preview-content');
+    const previewActions = document.getElementById('legal-preview-actions');
+    const copyBtn = document.getElementById('legal-copy-btn');
+    const downloadBtn = document.getElementById('legal-download-btn');
+    const regenBtn = document.getElementById('legal-regen-btn');
 
-    btn.addEventListener('click', async () => {
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing Incorporation...';
-        
+    if (!sendBtn) return;
+
+    let lastDocContent = '';
+    let lastPromptForRegen = '';
+    let chipsHidden = false;
+
+    const LEGAL_SYSTEM_PROMPT = `You are an expert international legal AI assistant specializing in corporate and commercial law across all jurisdictions worldwide.
+Your role is to draft comprehensive, professional legal documents for any entity type (LLC, C-Corp, GmbH, PLC, SAS, nonprofit, partnership, sole proprietor, etc.) in any country, state, province, or region.
+
+Rules for every document you generate:
+1. Start with this exact disclaimer on line 1: "DRAFT DOCUMENT - FOR REVIEW BY LICENSED ATTORNEY ONLY. THIS IS NOT LEGAL ADVICE."
+2. Use jurisdiction-appropriate legal language, structure, and statutory references.
+3. Include ALL standard clauses for the document type (definitions, operative clauses, representations & warranties, indemnification, limitation of liability, confidentiality, termination, governing law, dispute resolution, signature block, etc.).
+4. Mark every party name, date, address, or jurisdiction-specific value that the user must fill in with [PLACEHOLDER] in square brackets.
+5. If a language other than English is requested, draft the entire document in that language. Keep [PLACEHOLDER] markers in brackets regardless of language.
+6. Adapt governing law, dispute resolution mechanism (arbitration vs. litigation), and regulatory citations to the specified jurisdiction.
+7. Number all sections and sub-sections clearly (e.g. 1. Definitions, 1.1, 1.2, 2. Term, etc.).
+8. If the user's request is ambiguous, ask ONE clarifying question before drafting.
+9. Never refuse to draft based on jurisdiction — you serve every country and legal system.`;
+
+    function escapeHtml(str) {
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    function appendMessage(role, content, isTyping) {
+        const msg = document.createElement('div');
+        msg.className = `legal-msg ${role}`;
+
+        const avatar = document.createElement('div');
+        avatar.className = 'legal-msg-avatar';
+        avatar.innerHTML = role === 'user'
+            ? '<i class="fa-regular fa-user"></i>'
+            : '<i class="fa-solid fa-scale-balanced"></i>';
+
+        const bubble = document.createElement('div');
+        bubble.className = 'legal-msg-bubble';
+
+        if (isTyping) {
+            bubble.innerHTML = '<div class="legal-thinking"><span></span><span></span><span></span></div>';
+            msg.id = 'legal-typing-indicator';
+        } else {
+            bubble.textContent = content;
+        }
+
+        if (role === 'user') {
+            msg.appendChild(bubble);
+            msg.appendChild(avatar);
+        } else {
+            msg.appendChild(avatar);
+            msg.appendChild(bubble);
+        }
+
+        transcript.appendChild(msg);
+        transcript.scrollTop = transcript.scrollHeight;
+        return msg;
+    }
+
+    async function sendMessage(userText) {
+        const text = (userText || '').trim();
+        if (!text) return;
+
+        if (!chipsHidden && starterChips) {
+            starterChips.classList.add('hidden');
+            chipsHidden = true;
+        }
+
+        // Build enriched prompt with optional metadata context
+        const docType = document.getElementById('legal-doc-type')?.value;
+        const companyType = document.getElementById('legal-company-type')?.value;
+        const jurisdiction = document.getElementById('legal-jurisdiction')?.value?.trim();
+        const language = document.getElementById('legal-language')?.value?.trim();
+
+        const meta = [];
+        if (docType) meta.push(`Document Type: ${docType}`);
+        if (companyType) meta.push(`Company Type: ${companyType}`);
+        if (jurisdiction) meta.push(`Jurisdiction: ${jurisdiction}`);
+        if (language) meta.push(`Language: ${language}`);
+
+        const enrichedPrompt = meta.length > 0
+            ? `[Context — ${meta.join(' | ')}]\n\n${text}`
+            : text;
+
+        lastPromptForRegen = enrichedPrompt;
+
+        appendMessage('user', text);
+        const typingMsg = appendMessage('ai', '', true);
+
+        sendBtn.disabled = true;
+        if (input) input.disabled = true;
+
         try {
-            const companyName = AppState.user?.name ? `${AppState.user.name}Co` : 'NewVentureCo';
-            
-            status.innerText = 'Generating Articles of Organization via AI...';
+            const docContent = await window.LLMEngine.generateContent(enrichedPrompt, LEGAL_SYSTEM_PROMPT);
 
-            const articlesPrompt = `Draft a concise summary of Articles of Organization for a Delaware C-Corp named "${companyName} Inc." Include:
-1. Company name and state of incorporation
-2. Registered agent placeholder
-3. Number of authorized shares (10,000,000 common)
-4. Incorporator name placeholder
-5. Business purpose (general)
-Keep it under 300 words. Output as plain text, not markdown.`;
+            typingMsg.remove();
 
-            const articles = await window.LLMEngine.generateContent(articlesPrompt);
-            
-            status.innerHTML = `<div style="max-height:150px; overflow-y:auto; background:rgba(0,0,0,0.3); padding:12px; border-radius:8px; font-size:0.8rem; line-height:1.5; white-space:pre-wrap; margin-bottom:8px;">${articles}</div>
-            <span class="text-green"><i class="fa-solid fa-check-circle"></i> Articles generated. Ready for filing.</span>`;
+            const previewLine = docContent.split('\n').find(l => l.trim()) || 'Document generated.';
+            appendMessage('ai', `Document ready — see the preview panel → "${previewLine.slice(0, 70)}…"`);
 
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Incorporation Drafted';
-            btn.classList.replace('btn-primary', 'btn-outline');
-            btn.style.color = '#39FF14';
-            btn.style.borderColor = '#39FF14';
+            previewContent.innerHTML = `<pre class="legal-doc-text">${escapeHtml(docContent)}</pre>`;
+            previewActions.classList.remove('hidden');
+            lastDocContent = docContent;
 
-        } catch(err) {
-            status.innerHTML = `<span class="text-accent-red">Error: ${err.message}</span>`;
-            btn.innerHTML = 'Incorporate (Delaware C-Corp)';
-            btn.disabled = false;
+            if (window.logToTerminal) {
+                window.logToTerminal('Legal AI: Document generated successfully.', 'system');
+            }
+        } catch (err) {
+            typingMsg.remove();
+            appendMessage('ai', `Error generating document: ${err.message}. Please check your API key and try again.`);
+        } finally {
+            sendBtn.disabled = false;
+            if (input) {
+                input.disabled = false;
+                input.value = '';
+                input.focus();
+            }
+        }
+    }
+
+    // Send button click
+    sendBtn.addEventListener('click', () => sendMessage(input?.value));
+
+    // Enter = send, Shift+Enter = newline
+    input?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage(input.value);
         }
     });
-}
 
-function initLegalDocs() {
-    const buttons = document.querySelectorAll('.dl-btn');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-            const docType = e.target.getAttribute('data-doc-type') || e.target.innerText.trim();
-            const originalText = e.target.innerText;
-            e.target.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
-            e.target.disabled = true;
-
-            try {
-                const companyName = AppState.user?.name ? `${AppState.user.name}Co Inc.` : 'NewVentureCo Inc.';
-
-                const docPrompt = `You are a corporate lawyer AI. Draft a professional ${docType} for a startup called "${companyName}".
-The document should be comprehensive, include standard clauses, placeholder fields marked with [PLACEHOLDER], and be ready for review by a real attorney.
-Output the full document as plain text. Do not use markdown formatting.`;
-
-                const docContent = await window.LLMEngine.generateContent(docPrompt);
-
-                // Create and trigger a real download
-                const blob = new Blob([docContent], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `${docType.replace(/\s+/g, '_').toLowerCase()}_${companyName.replace(/\s+/g, '_')}.txt`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-
-                e.target.innerHTML = '<i class="fa-solid fa-check"></i> Downloaded';
-                e.target.style.color = '#39FF14';
-                
-                if(window.logToTerminal) {
-                    window.logToTerminal(`Legal document "${docType}" generated and downloaded.`, 'system');
-                }
-
-                setTimeout(() => {
-                    e.target.innerHTML = originalText;
-                    e.target.style.color = '';
-                    e.target.disabled = false;
-                }, 4000);
-
-            } catch(err) {
-                alert(`Document generation failed: ${err.message}`);
-                e.target.innerHTML = originalText;
-                e.target.disabled = false;
-            }
+    // Starter chips
+    document.querySelectorAll('.legal-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            const prompt = chip.getAttribute('data-prompt');
+            if (input) input.value = prompt;
+            sendMessage(prompt);
         });
+    });
+
+    // Copy to clipboard
+    copyBtn?.addEventListener('click', () => {
+        if (!lastDocContent) return;
+        navigator.clipboard.writeText(lastDocContent).then(() => {
+            const orig = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+            setTimeout(() => { copyBtn.innerHTML = orig; }, 2000);
+        }).catch(() => {
+            // Fallback for browsers that block clipboard
+            const ta = document.createElement('textarea');
+            ta.value = lastDocContent;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            const orig = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+            setTimeout(() => { copyBtn.innerHTML = orig; }, 2000);
+        });
+    });
+
+    // Download as .txt
+    downloadBtn?.addEventListener('click', () => {
+        if (!lastDocContent) return;
+        const docType = document.getElementById('legal-doc-type')?.value || 'legal_document';
+        const blob = new Blob([lastDocContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${docType.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    });
+
+    // Regenerate last document
+    regenBtn?.addEventListener('click', () => {
+        if (!lastPromptForRegen) return;
+        sendMessage(lastPromptForRegen);
     });
 }
