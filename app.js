@@ -16,6 +16,8 @@ const AppState = {
     }
 };
 
+const BUSINESS_BUILDER_STARTER_PROMPT = 'Build a B2B AI workflow automation startup for small operations teams. Include MVP, monetization, and launch KPIs.';
+
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
@@ -232,15 +234,14 @@ function initPortfolioActions() {
     if(!launchBtn) return;
 
     launchBtn.addEventListener('click', () => {
-        const starterPrompt = 'Build a B2B AI workflow automation startup for small operations teams. Include MVP, monetization, and launch KPIs.';
         const promptArea = document.getElementById('builder-prompt');
         if(promptArea && !promptArea.value.trim()) {
-            promptArea.value = starterPrompt;
+            promptArea.value = BUSINESS_BUILDER_STARTER_PROMPT;
         }
 
         if(Array.isArray(AppState.portfolio)) {
             AppState.portfolio.unshift({
-                id: `d${Date.now()}`,
+                id: `d${Date.now()}-${Math.floor(Math.random() * 100000)}`,
                 name: 'New Venture Draft',
                 category: 'Business Builder',
                 status: 'Building',
@@ -249,25 +250,7 @@ function initPortfolioActions() {
             });
             renderPortfolio();
         } else {
-            const grid = document.getElementById('portfolio-grid');
-            if(grid) {
-                grid.insertAdjacentHTML('afterbegin', `
-                    <div class="portfolio-card glass-panel">
-                        <div style="display: flex; justify-content: space-between; align-items: start;">
-                            <h3>New Venture Draft</h3>
-                            <span class="badge" style="background: rgba(255,255,255,0.1)">Business Builder</span>
-                        </div>
-                        <div class="mt-4">
-                            <p class="text-sm text-secondary">Status: <span class="text-yellow">Building</span></p>
-                            <p class="text-sm text-secondary">ARR: <span class="text-primary font-bold">$0</span></p>
-                        </div>
-                        <div class="mt-4" style="height: 4px; background: var(--panel-border); border-radius: 2px;">
-                            <div style="height: 100%; width: 5%; background: var(--accent-cyan);"></div>
-                        </div>
-                        <button class="btn btn-sm btn-outline btn-block mt-4">Manage Engine</button>
-                    </div>
-                `);
-            }
+            window.logToTerminal?.('Portfolio state unavailable, opening Business Builder without draft persistence.', 'system');
         }
 
         setActiveView('view-builder');
