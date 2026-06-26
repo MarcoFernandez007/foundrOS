@@ -17,7 +17,11 @@ const AgentTemplates = [
     { id: 'legal', name: 'Legal Agent', role: 'Compliance', icon: 'fa-scale-balanced', color: 'text-accent-purple' },
     { id: 'qa', name: 'QA Reviewer', role: 'Testing', icon: 'fa-vial', color: 'text-accent-lime' },
     { id: 'ops', name: 'Ops Agent', role: 'Reliability', icon: 'fa-gears', color: 'text-accent-cyan' },
-    { id: 'release', name: 'Release Engineer', role: 'Deployment', icon: 'fa-rocket', color: 'text-accent-purple' }
+    { id: 'release', name: 'Release Engineer', role: 'Deployment', icon: 'fa-rocket', color: 'text-accent-purple' },
+    { id: 'advertising', name: 'Advertising Agent', role: 'Bidding & Creative', icon: 'fa-rectangle-ad', color: 'text-accent-red' },
+    { id: 'physical_control', name: 'Physical Control (Robots)', role: 'World Model Space', icon: 'fa-robot', color: 'text-accent-lime' },
+    { id: 'co_scientist', name: 'Co-Scientist', role: 'Hypothesis Generation', icon: 'fa-flask', color: 'text-accent-cyan' },
+    { id: 'research', name: 'Research Agent', role: 'Deep Analysis', icon: 'fa-microscope', color: 'text-accent-purple' }
 ];
 
 window.BusinessBuilderAgentRoster = AgentTemplates.map(agent => agent.name);

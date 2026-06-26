@@ -4,8 +4,8 @@ const CommandCenter = {
     agents: [
         { id: 'ceo', name: 'CEO Agent', icon: 'fa-user-tie', x: 20, y: 30, color: 'var(--accent-purple)', status: 'Idle', energy: 100 },
         { id: 'cto', name: 'CTO Agent', icon: 'fa-laptop-code', x: 40, y: 50, color: 'var(--accent-cyan)', status: 'Compiling', energy: 85 },
-        { id: 'cmo', name: 'CMO Agent', icon: 'fa-bullhorn', x: 70, y: 20, color: 'var(--accent-red)', status: 'Scraping', energy: 90 },
-        { id: 'cfo', name: 'CFO Agent', icon: 'fa-chart-pie', x: 80, y: 60, color: 'var(--accent-lime)', status: 'Idle', energy: 100 },
+        { id: 'marketing', name: 'Marketing Agent', icon: 'fa-bullhorn', x: 70, y: 20, color: 'var(--accent-red)', status: 'Scraping', energy: 90 },
+        { id: 'finance', name: 'Finance Agent', icon: 'fa-chart-pie', x: 80, y: 60, color: 'var(--accent-lime)', status: 'Idle', energy: 100 },
         { id: 'legal', name: 'Legal Agent', icon: 'fa-scale-balanced', x: 10, y: 70, color: 'var(--accent-purple)', status: 'Reviewing', energy: 60 },
         { id: 'design', name: 'Design Agent', icon: 'fa-pen-nib', x: 50, y: 80, color: 'var(--accent-cyan)', status: 'Drafting', energy: 75 },
         { id: 'hr', name: 'HR Agent', icon: 'fa-users', x: 90, y: 90, color: 'var(--accent-red)', status: 'Idle', energy: 100 },
@@ -18,7 +18,11 @@ const CommandCenter = {
         { id: 'growth', name: 'Growth Agent', icon: 'fa-rocket', x: 75, y: 75, color: 'var(--accent-purple)', status: 'Optimizing', energy: 70 },
         { id: 'market', name: 'Market Intel Agent', icon: 'fa-chart-line', x: 45, y: 22, color: 'var(--accent-cyan)', status: 'Signal Mining', energy: 88 },
         { id: 'brand', name: 'Brand Agent', icon: 'fa-feather-pointed', x: 65, y: 88, color: 'var(--accent-red)', status: 'Messaging', energy: 84 },
-        { id: 'strategy', name: 'Strategy Agent', icon: 'fa-chess-queen', x: 12, y: 28, color: 'var(--accent-purple)', status: 'Positioning', energy: 92 }
+        { id: 'strategy', name: 'Strategy Agent', icon: 'fa-chess-queen', x: 12, y: 28, color: 'var(--accent-purple)', status: 'Positioning', energy: 92 },
+        { id: 'advertising', name: 'Advertising Agent', icon: 'fa-rectangle-ad', x: 85, y: 15, color: 'var(--accent-red)', status: 'Bidding', energy: 100 },
+        { id: 'physical_control', name: 'Physical Control (Robots)', icon: 'fa-robot', x: 8, y: 88, color: 'var(--accent-lime)', status: 'Operating', energy: 100 },
+        { id: 'co_scientist', name: 'Co-Scientist', icon: 'fa-flask', x: 35, y: 75, color: 'var(--accent-cyan)', status: 'Hypothesizing', energy: 100 },
+        { id: 'research', name: 'Research Agent', icon: 'fa-microscope', x: 65, y: 60, color: 'var(--accent-purple)', status: 'Analyzing', energy: 100 }
     ],
     selectedAgent: null,
 

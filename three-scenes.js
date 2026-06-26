@@ -1,7 +1,7 @@
 // three-scenes.js - Three.js Visualizations (RTS Map & Agent Office Scene)
 
 (function() {
-    const OFFICE_VISIBLE_AGENT_COUNT = 17;
+    const OFFICE_VISIBLE_AGENT_COUNT = 21;
     const OFFICE_ANIMATION_TIME_SCALE = 0.001;
     const OFFICE_WAVE_FREQUENCY = 2;
     const OFFICE_WAVE_AMPLITUDE = 0.08;
@@ -140,7 +140,7 @@
 
     function buildAgentOffice() {
         // Agent Office-inspired virtual workspace with FoundrOS agents represented as animated people.
-        const floorGeo = new THREE.PlaneGeometry(24, 24);
+        const floorGeo = new THREE.PlaneGeometry(36, 36);
         const floorMat = new THREE.MeshStandardMaterial({ color: 0x1f2937 });
         const floor = new THREE.Mesh(floorGeo, floorMat);
         floor.rotation.x = -Math.PI / 2;
@@ -149,14 +149,14 @@
 
         // Room shell
         const wallMaterial = new THREE.MeshStandardMaterial({ color: 0x111827 });
-        const backWall = new THREE.Mesh(new THREE.BoxGeometry(24, 6, 0.4), wallMaterial);
-        backWall.position.set(0, 2.5, -12);
+        const backWall = new THREE.Mesh(new THREE.BoxGeometry(36, 6, 0.4), wallMaterial);
+        backWall.position.set(0, 2.5, -18);
         officeGroup.add(backWall);
-        const sideWallL = new THREE.Mesh(new THREE.BoxGeometry(0.4, 6, 24), wallMaterial);
-        sideWallL.position.set(-12, 2.5, 0);
+        const sideWallL = new THREE.Mesh(new THREE.BoxGeometry(0.4, 6, 36), wallMaterial);
+        sideWallL.position.set(-18, 2.5, 0);
         officeGroup.add(sideWallL);
         const sideWallR = sideWallL.clone();
-        sideWallR.position.set(12, 2.5, 0);
+        sideWallR.position.set(18, 2.5, 0);
         officeGroup.add(sideWallR);
 
         const defaultRoster = (typeof AgentTemplates !== 'undefined' && Array.isArray(AgentTemplates))
@@ -175,7 +175,7 @@
             const desk = new THREE.Mesh(deskGeo, deskMat);
             
             const angle = (i / deskCount) * Math.PI * 2;
-            const radius = 7;
+            const radius = 12;
             desk.position.set(Math.cos(angle)*radius, 0, Math.sin(angle)*radius);
             desk.lookAt(0,0,0);
             

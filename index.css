@@ -10,7 +10,7 @@
     
     --accent-cyan: #1E3A8A;
     --accent-purple: #1D4ED8;
-    --accent-lime: #39FF14;
+    --accent-lime: #10B981;
     --accent-red: #FF2E93;
     
     --btn-primary-bg: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
@@ -50,7 +50,7 @@ body {
 .text-accent-lime { color: var(--accent-lime); }
 .text-red { color: #ff5f56; }
 .text-yellow { color: #ffbd2e; }
-.text-green { color: #27c93f; }
+.text-green { color: #10B981; }
 .mt-2 { margin-top: 0.5rem; }
 .mt-4 { margin-top: 1rem; }
 .text-sm { font-size: 0.875rem; }
@@ -371,6 +371,14 @@ body {
     font-family: var(--font-sans);
     outline: none;
     transition: border-color 0.2s;
+}
+.input-group select option {
+    background-color: #14141A;
+    color: #FFFFFF;
+}
+[data-theme="light"] .input-group select option {
+    background-color: #FFFFFF;
+    color: #09090B;
 }
 .input-group textarea {
     min-height: 100px;
