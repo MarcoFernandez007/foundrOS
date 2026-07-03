@@ -546,8 +546,10 @@ function initTeamActions() {
     renderTeam();
     document.getElementById('btn-add-team-member')?.addEventListener('click', () => {
         const sel = document.getElementById('team-agent-template');
-        if (sel && typeof AgentTemplates !== 'undefined') {
-            sel.innerHTML = AgentTemplates.map(a => `<option value="${a.id}">${a.name} (${a.role})</option>`).join('');
+        if (sel && typeof AgentDepartments !== 'undefined') {
+            sel.innerHTML = Object.entries(AgentDepartments).map(([dept, agents]) =>
+                `<optgroup label="── ${dept} ──">${agents.map(a => `<option value="${a.id}">${a.name} (${a.role})</option>`).join('')}</optgroup>`
+            ).join('');
         }
         document.getElementById('team-member-type').value = 'agent';
         document.getElementById('team-agent-select').classList.remove('hidden');

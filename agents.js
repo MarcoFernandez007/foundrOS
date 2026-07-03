@@ -1,28 +1,225 @@
 // agents.js - Business Builder Agent Engine & Paperclip Orchestration
+// Agent catalog sourced from github.com/msitarzewski/agency-agents (147+ agents, 17 departments)
 
-const AgentTemplates = [
+const AgentDepartments = {
+  'FoundrOS Core': [
     { id: 'ceo', name: 'CEO Agent', role: 'Vision & Scope', icon: 'fa-user-tie', color: 'text-accent-purple' },
     { id: 'market_intel', name: 'Market Intelligence Agent', role: 'Trend Discovery', icon: 'fa-chart-line', color: 'text-accent-cyan' },
     { id: 'strategist', name: 'Strategy Agent', role: 'Positioning & Moat', icon: 'fa-chess-queen', color: 'text-accent-purple' },
-    { id: 'product', name: 'Product Agent', role: 'Feature Spec', icon: 'fa-box-open', color: 'text-accent-cyan' },
-    { id: 'em', name: 'Engineering Manager', role: 'Architecture', icon: 'fa-network-wired', color: 'text-accent-cyan' },
-    { id: 'lead_dev', name: 'Lead Developer', role: 'Core Logic', icon: 'fa-code', color: 'text-accent-cyan' },
-    { id: 'frontend', name: 'Frontend Engineer', role: 'UI/UX Implementation', icon: 'fa-desktop', color: 'text-accent-cyan' },
-    { id: 'backend', name: 'Backend Engineer', role: 'API & DB', icon: 'fa-server', color: 'text-accent-cyan' },
-    { id: 'data', name: 'Data Agent', role: 'Analytics & Metrics', icon: 'fa-database', color: 'text-accent-purple' },
-    { id: 'designer', name: 'Product Designer', role: 'UX & CSS', icon: 'fa-pen-nib', color: 'text-accent-red' },
-    { id: 'brand', name: 'Brand Agent', role: 'Narrative & Messaging', icon: 'fa-feather-pointed', color: 'text-accent-red' },
-    { id: 'growth', name: 'Growth Agent', role: 'Acquisition Experiments', icon: 'fa-bullhorn', color: 'text-accent-lime' },
-    { id: 'finance', name: 'Finance Agent', role: 'Unit Economics', icon: 'fa-chart-pie', color: 'text-accent-lime' },
-    { id: 'legal', name: 'Legal Agent', role: 'Compliance', icon: 'fa-scale-balanced', color: 'text-accent-purple' },
-    { id: 'qa', name: 'QA Reviewer', role: 'Testing', icon: 'fa-vial', color: 'text-accent-lime' },
     { id: 'ops', name: 'Ops Agent', role: 'Reliability', icon: 'fa-gears', color: 'text-accent-cyan' },
     { id: 'release', name: 'Release Engineer', role: 'Deployment', icon: 'fa-rocket', color: 'text-accent-purple' },
     { id: 'advertising', name: 'Advertising Agent', role: 'Bidding & Creative', icon: 'fa-rectangle-ad', color: 'text-accent-red' },
     { id: 'physical_control', name: 'Physical Control (Robots)', role: 'World Model Space', icon: 'fa-robot', color: 'text-accent-lime' },
     { id: 'co_scientist', name: 'Co-Scientist', role: 'Hypothesis Generation', icon: 'fa-flask', color: 'text-accent-cyan' },
     { id: 'research', name: 'Research Agent', role: 'Deep Analysis', icon: 'fa-microscope', color: 'text-accent-purple' }
-];
+  ],
+  'Engineering': [
+    { id: 'eng_ai_data_remediation', name: 'AI Data Remediation Engineer', role: 'Data Quality & Repair', icon: 'fa-database', color: 'text-accent-cyan' },
+    { id: 'eng_ai_engineer', name: 'AI Engineer', role: 'ML & AI Systems', icon: 'fa-brain', color: 'text-accent-purple' },
+    { id: 'eng_autonomous_opt', name: 'Autonomous Optimization Architect', role: 'Self-Improving Systems', icon: 'fa-wand-magic-sparkles', color: 'text-accent-purple' },
+    { id: 'eng_backend_architect', name: 'Backend Architect', role: 'Server & API Design', icon: 'fa-server', color: 'text-accent-cyan' },
+    { id: 'eng_cms_developer', name: 'CMS Developer', role: 'Content Management', icon: 'fa-file-code', color: 'text-accent-cyan' },
+    { id: 'eng_code_reviewer', name: 'Code Reviewer', role: 'Code Quality', icon: 'fa-magnifying-glass-chart', color: 'text-accent-lime' },
+    { id: 'eng_codebase_onboarding', name: 'Codebase Onboarding Engineer', role: 'Developer Ramp-Up', icon: 'fa-person-walking-arrow-right', color: 'text-accent-cyan' },
+    { id: 'eng_data_engineer', name: 'Data Engineer', role: 'Pipelines & ETL', icon: 'fa-database', color: 'text-accent-cyan' },
+    { id: 'eng_database_optimizer', name: 'Database Optimizer', role: 'Query Performance', icon: 'fa-gauge-high', color: 'text-accent-lime' },
+    { id: 'eng_devops_automator', name: 'DevOps Automator', role: 'CI/CD & Infra', icon: 'fa-gears', color: 'text-accent-cyan' },
+    { id: 'eng_email_intel', name: 'Email Intelligence Engineer', role: 'Email Systems', icon: 'fa-envelope-open-text', color: 'text-accent-cyan' },
+    { id: 'eng_embedded_firmware', name: 'Embedded Firmware Engineer', role: 'IoT & Hardware', icon: 'fa-microchip', color: 'text-accent-lime' },
+    { id: 'eng_frontend_developer', name: 'Frontend Developer', role: 'UI Implementation', icon: 'fa-desktop', color: 'text-accent-cyan' },
+    { id: 'eng_git_workflow', name: 'Git Workflow Master', role: 'Version Control', icon: 'fa-code-branch', color: 'text-accent-cyan' },
+    { id: 'eng_incident_response', name: 'Incident Response Commander', role: 'Crisis Management', icon: 'fa-triangle-exclamation', color: 'text-accent-red' },
+    { id: 'eng_it_service_mgr', name: 'IT Service Manager', role: 'ITSM', icon: 'fa-headset', color: 'text-accent-cyan' },
+    { id: 'eng_minimal_change', name: 'Minimal Change Engineer', role: 'Surgical Edits', icon: 'fa-scalpel', color: 'text-accent-lime' },
+    { id: 'eng_mobile_app', name: 'Mobile App Builder', role: 'iOS & Android', icon: 'fa-mobile-screen-button', color: 'text-accent-cyan' },
+    { id: 'eng_multi_agent_arch', name: 'Multi-Agent Systems Architect', role: 'Agent Orchestration', icon: 'fa-sitemap', color: 'text-accent-purple' },
+    { id: 'eng_prompt_engineer', name: 'Prompt Engineer', role: 'LLM Prompting', icon: 'fa-terminal', color: 'text-accent-purple' },
+    { id: 'eng_rapid_prototyper', name: 'Rapid Prototyper', role: 'Fast MVPs', icon: 'fa-bolt', color: 'text-accent-lime' },
+    { id: 'eng_senior_developer', name: 'Senior Developer', role: 'Full-Stack Expert', icon: 'fa-code', color: 'text-accent-cyan' },
+    { id: 'eng_software_architect', name: 'Software Architect', role: 'System Design', icon: 'fa-network-wired', color: 'text-accent-purple' },
+    { id: 'eng_solidity', name: 'Solidity Smart Contract Engineer', role: 'Web3 & Blockchain', icon: 'fa-cube', color: 'text-accent-purple' },
+    { id: 'eng_sre', name: 'Site Reliability Engineer', role: 'Uptime & SLOs', icon: 'fa-shield-halved', color: 'text-accent-lime' },
+    { id: 'eng_technical_writer', name: 'Technical Writer', role: 'Documentation', icon: 'fa-file-lines', color: 'text-accent-cyan' },
+    { id: 'eng_voice_ai', name: 'Voice AI Integration Engineer', role: 'Speech & NLP', icon: 'fa-microphone', color: 'text-accent-purple' }
+  ],
+  'Design': [
+    { id: 'des_brand_guardian', name: 'Brand Guardian', role: 'Brand Consistency', icon: 'fa-palette', color: 'text-accent-red' },
+    { id: 'des_image_prompt', name: 'Image Prompt Engineer', role: 'AI Image Generation', icon: 'fa-image', color: 'text-accent-red' },
+    { id: 'des_inclusive_visuals', name: 'Inclusive Visuals Specialist', role: 'Accessibility Design', icon: 'fa-universal-access', color: 'text-accent-red' },
+    { id: 'des_persona_walkthrough', name: 'Persona Walkthrough', role: 'User Journey Mapping', icon: 'fa-person-walking', color: 'text-accent-red' },
+    { id: 'des_ui_designer', name: 'UI Designer', role: 'Visual Interface', icon: 'fa-pen-nib', color: 'text-accent-red' },
+    { id: 'des_ux_architect', name: 'UX Architect', role: 'Information Architecture', icon: 'fa-layer-group', color: 'text-accent-red' },
+    { id: 'des_ux_researcher', name: 'UX Researcher', role: 'User Studies', icon: 'fa-users-viewfinder', color: 'text-accent-red' },
+    { id: 'des_visual_storyteller', name: 'Visual Storyteller', role: 'Narrative Design', icon: 'fa-book-open', color: 'text-accent-red' },
+    { id: 'des_whimsy_injector', name: 'Whimsy Injector', role: 'Delight & Surprise', icon: 'fa-wand-sparkles', color: 'text-accent-red' }
+  ],
+  'Marketing': [
+    { id: 'mkt_content_creator', name: 'Content Creator', role: 'Blog & Copy', icon: 'fa-pen-fancy', color: 'text-accent-lime' },
+    { id: 'mkt_growth_hacker', name: 'Growth Hacker', role: 'Viral Experiments', icon: 'fa-chart-line', color: 'text-accent-lime' },
+    { id: 'mkt_seo_specialist', name: 'SEO Specialist', role: 'Search Rankings', icon: 'fa-magnifying-glass', color: 'text-accent-lime' },
+    { id: 'mkt_email_strategist', name: 'Email Strategist', role: 'Campaigns & Drip', icon: 'fa-envelope', color: 'text-accent-lime' },
+    { id: 'mkt_social_media', name: 'Social Media Strategist', role: 'Platform Growth', icon: 'fa-share-nodes', color: 'text-accent-lime' },
+    { id: 'mkt_linkedin_creator', name: 'LinkedIn Content Creator', role: 'B2B Social', icon: 'fa-linkedin', color: 'text-accent-lime' },
+    { id: 'mkt_twitter_engager', name: 'Twitter/X Engager', role: 'X Platform Growth', icon: 'fa-x-twitter', color: 'text-accent-lime' },
+    { id: 'mkt_reddit_builder', name: 'Reddit Community Builder', role: 'Community Growth', icon: 'fa-reddit', color: 'text-accent-lime' },
+    { id: 'mkt_instagram', name: 'Instagram Curator', role: 'Visual Social', icon: 'fa-instagram', color: 'text-accent-lime' },
+    { id: 'mkt_tiktok', name: 'TikTok Strategist', role: 'Short Video Growth', icon: 'fa-tiktok', color: 'text-accent-lime' },
+    { id: 'mkt_podcast', name: 'Podcast Strategist', role: 'Audio Content', icon: 'fa-podcast', color: 'text-accent-lime' },
+    { id: 'mkt_pr_comms', name: 'PR Communications Manager', role: 'Press & Media', icon: 'fa-newspaper', color: 'text-accent-lime' },
+    { id: 'mkt_video_opt', name: 'Video Optimization Specialist', role: 'Video SEO', icon: 'fa-video', color: 'text-accent-lime' },
+    { id: 'mkt_app_store_opt', name: 'App Store Optimizer', role: 'ASO', icon: 'fa-mobile-screen', color: 'text-accent-lime' },
+    { id: 'mkt_book_coauthor', name: 'Book Co-Author', role: 'Long-form Content', icon: 'fa-book', color: 'text-accent-lime' },
+    { id: 'mkt_carousel_engine', name: 'Carousel Growth Engine', role: 'Carousel Posts', icon: 'fa-images', color: 'text-accent-lime' },
+    { id: 'mkt_multi_platform', name: 'Multi-Platform Publisher', role: 'Cross-Channel', icon: 'fa-share-from-square', color: 'text-accent-lime' },
+    { id: 'mkt_aeo', name: 'AEO Foundations Specialist', role: 'Answer Engine Optimization', icon: 'fa-robot', color: 'text-accent-lime' },
+    { id: 'mkt_ai_citation', name: 'AI Citation Strategist', role: 'LLM Visibility', icon: 'fa-quote-left', color: 'text-accent-lime' },
+    { id: 'mkt_x_intel', name: 'X/Twitter Intelligence Analyst', role: 'Social Intel', icon: 'fa-binoculars', color: 'text-accent-lime' }
+  ],
+  'Paid Media': [
+    { id: 'pm_auditor', name: 'Paid Media Auditor', role: 'Campaign Audit', icon: 'fa-clipboard-check', color: 'text-accent-red' },
+    { id: 'pm_creative', name: 'Creative Strategist', role: 'Ad Creative', icon: 'fa-paintbrush', color: 'text-accent-red' },
+    { id: 'pm_paid_social', name: 'Paid Social Strategist', role: 'Social Ads', icon: 'fa-rectangle-ad', color: 'text-accent-red' },
+    { id: 'pm_ppc', name: 'PPC Strategist', role: 'Pay-Per-Click', icon: 'fa-hand-pointer', color: 'text-accent-red' },
+    { id: 'pm_programmatic', name: 'Programmatic Buyer', role: 'RTB & Display', icon: 'fa-chart-area', color: 'text-accent-red' },
+    { id: 'pm_search_query', name: 'Search Query Analyst', role: 'Keyword Intel', icon: 'fa-magnifying-glass-dollar', color: 'text-accent-red' },
+    { id: 'pm_tracking', name: 'Tracking Specialist', role: 'Attribution & Pixels', icon: 'fa-crosshairs', color: 'text-accent-red' }
+  ],
+  'Product': [
+    { id: 'prod_manager', name: 'Product Manager', role: 'Roadmap & Priorities', icon: 'fa-box-open', color: 'text-accent-cyan' },
+    { id: 'prod_behavioral_nudge', name: 'Behavioral Nudge Engine', role: 'User Psychology', icon: 'fa-brain', color: 'text-accent-cyan' },
+    { id: 'prod_feedback_synth', name: 'Feedback Synthesizer', role: 'Voice of Customer', icon: 'fa-comments', color: 'text-accent-cyan' },
+    { id: 'prod_sprint_prioritizer', name: 'Sprint Prioritizer', role: 'Backlog Ranking', icon: 'fa-list-ol', color: 'text-accent-cyan' },
+    { id: 'prod_trend_researcher', name: 'Trend Researcher', role: 'Market Signals', icon: 'fa-arrow-trend-up', color: 'text-accent-cyan' }
+  ],
+  'Project Management': [
+    { id: 'pjm_experiment_tracker', name: 'Experiment Tracker', role: 'A/B Test Management', icon: 'fa-flask-vial', color: 'text-accent-purple' },
+    { id: 'pjm_jira_steward', name: 'Jira Workflow Steward', role: 'Ticket Management', icon: 'fa-jira', color: 'text-accent-purple' },
+    { id: 'pjm_meeting_notes', name: 'Meeting Notes Specialist', role: 'Note-Taking & Actions', icon: 'fa-clipboard', color: 'text-accent-purple' },
+    { id: 'pjm_project_shepherd', name: 'Project Shepherd', role: 'Delivery Oversight', icon: 'fa-diagram-project', color: 'text-accent-purple' },
+    { id: 'pjm_studio_ops', name: 'Studio Operations', role: 'Studio Workflow', icon: 'fa-building', color: 'text-accent-purple' },
+    { id: 'pjm_studio_producer', name: 'Studio Producer', role: 'Production Pipeline', icon: 'fa-film', color: 'text-accent-purple' },
+    { id: 'pjm_senior_pm', name: 'Senior Project Manager', role: 'Strategic PM', icon: 'fa-calendar-check', color: 'text-accent-purple' }
+  ],
+  'Sales': [
+    { id: 'sales_account', name: 'Account Strategist', role: 'Key Accounts', icon: 'fa-handshake', color: 'text-accent-lime' },
+    { id: 'sales_coach', name: 'Sales Coach', role: 'Rep Training', icon: 'fa-chalkboard-user', color: 'text-accent-lime' },
+    { id: 'sales_deal', name: 'Deal Strategist', role: 'Closing Tactics', icon: 'fa-sack-dollar', color: 'text-accent-lime' },
+    { id: 'sales_discovery', name: 'Discovery Coach', role: 'Qualification', icon: 'fa-magnifying-glass', color: 'text-accent-lime' },
+    { id: 'sales_engineer', name: 'Sales Engineer', role: 'Technical Sales', icon: 'fa-screwdriver-wrench', color: 'text-accent-lime' },
+    { id: 'sales_lead_gen', name: 'Lead Gen Strategist', role: 'Pipeline Generation', icon: 'fa-filter', color: 'text-accent-lime' },
+    { id: 'sales_outbound', name: 'Outbound Strategist', role: 'Cold Outreach', icon: 'fa-paper-plane', color: 'text-accent-lime' },
+    { id: 'sales_pipeline', name: 'Pipeline Analyst', role: 'Funnel Metrics', icon: 'fa-chart-bar', color: 'text-accent-lime' },
+    { id: 'sales_proposal', name: 'Proposal Strategist', role: 'RFP & Proposals', icon: 'fa-file-invoice', color: 'text-accent-lime' }
+  ],
+  'Finance': [
+    { id: 'fin_bookkeeper', name: 'Bookkeeper & Controller', role: 'Accounting', icon: 'fa-calculator', color: 'text-accent-lime' },
+    { id: 'fin_analyst', name: 'Financial Analyst', role: 'Financial Modeling', icon: 'fa-chart-pie', color: 'text-accent-lime' },
+    { id: 'fin_fpa', name: 'FP&A Analyst', role: 'Forecasting', icon: 'fa-chart-line', color: 'text-accent-lime' },
+    { id: 'fin_investment', name: 'Investment Researcher', role: 'Market Research', icon: 'fa-money-bill-trend-up', color: 'text-accent-lime' },
+    { id: 'fin_tax', name: 'Tax Strategist', role: 'Tax Optimization', icon: 'fa-file-invoice-dollar', color: 'text-accent-lime' }
+  ],
+  'Testing & QA': [
+    { id: 'test_accessibility', name: 'Accessibility Auditor', role: 'WCAG Compliance', icon: 'fa-universal-access', color: 'text-accent-lime' },
+    { id: 'test_api', name: 'API Tester', role: 'Endpoint Validation', icon: 'fa-plug', color: 'text-accent-lime' },
+    { id: 'test_evidence', name: 'Evidence Collector', role: 'Bug Documentation', icon: 'fa-camera', color: 'text-accent-lime' },
+    { id: 'test_performance', name: 'Performance Benchmarker', role: 'Load & Speed', icon: 'fa-gauge-high', color: 'text-accent-lime' },
+    { id: 'test_reality_checker', name: 'Reality Checker', role: 'Fact Verification', icon: 'fa-check-double', color: 'text-accent-lime' },
+    { id: 'test_results', name: 'Test Results Analyzer', role: 'Results Triage', icon: 'fa-chart-column', color: 'text-accent-lime' },
+    { id: 'test_tool_evaluator', name: 'Tool Evaluator', role: 'Tooling Comparison', icon: 'fa-screwdriver-wrench', color: 'text-accent-lime' },
+    { id: 'test_workflow_opt', name: 'Workflow Optimizer', role: 'Process Improvement', icon: 'fa-arrows-spin', color: 'text-accent-lime' }
+  ],
+  'Security': [
+    { id: 'sec_appsec', name: 'AppSec Engineer', role: 'Application Security', icon: 'fa-shield-halved', color: 'text-accent-red' },
+    { id: 'sec_architect', name: 'Security Architect', role: 'Security Design', icon: 'fa-lock', color: 'text-accent-red' },
+    { id: 'sec_blockchain', name: 'Blockchain Security Auditor', role: 'Smart Contract Audit', icon: 'fa-cube', color: 'text-accent-red' },
+    { id: 'sec_cloud', name: 'Cloud Security Architect', role: 'Cloud Hardening', icon: 'fa-cloud-arrow-up', color: 'text-accent-red' },
+    { id: 'sec_compliance', name: 'Compliance Auditor', role: 'Regulatory Compliance', icon: 'fa-clipboard-check', color: 'text-accent-red' },
+    { id: 'sec_incident', name: 'Incident Responder', role: 'Breach Response', icon: 'fa-triangle-exclamation', color: 'text-accent-red' },
+    { id: 'sec_pentest', name: 'Penetration Tester', role: 'Ethical Hacking', icon: 'fa-user-secret', color: 'text-accent-red' },
+    { id: 'sec_secops', name: 'Senior SecOps', role: 'Security Operations', icon: 'fa-eye', color: 'text-accent-red' },
+    { id: 'sec_threat_detect', name: 'Threat Detection Engineer', role: 'SIEM & Alerts', icon: 'fa-bell', color: 'text-accent-red' },
+    { id: 'sec_threat_intel', name: 'Threat Intelligence Analyst', role: 'Threat Research', icon: 'fa-binoculars', color: 'text-accent-red' }
+  ],
+  'Support': [
+    { id: 'sup_analytics', name: 'Analytics Reporter', role: 'Dashboard & Reports', icon: 'fa-chart-bar', color: 'text-accent-cyan' },
+    { id: 'sup_exec_summary', name: 'Executive Summary Generator', role: 'C-Suite Briefs', icon: 'fa-file-lines', color: 'text-accent-cyan' },
+    { id: 'sup_finance_tracker', name: 'Finance Tracker', role: 'Expense Tracking', icon: 'fa-money-check-dollar', color: 'text-accent-cyan' },
+    { id: 'sup_infra', name: 'Infrastructure Maintainer', role: 'Server Ops', icon: 'fa-server', color: 'text-accent-cyan' },
+    { id: 'sup_legal_compliance', name: 'Legal Compliance Checker', role: 'Policy Review', icon: 'fa-scale-balanced', color: 'text-accent-cyan' },
+    { id: 'sup_responder', name: 'Support Responder', role: 'Ticket Resolution', icon: 'fa-headset', color: 'text-accent-cyan' }
+  ],
+  'Game Development': [
+    { id: 'game_audio', name: 'Game Audio Engineer', role: 'Sound & Music', icon: 'fa-volume-high', color: 'text-accent-purple' },
+    { id: 'game_designer', name: 'Game Designer', role: 'Mechanics & Systems', icon: 'fa-gamepad', color: 'text-accent-purple' },
+    { id: 'game_level', name: 'Level Designer', role: 'World Building', icon: 'fa-map', color: 'text-accent-purple' },
+    { id: 'game_narrative', name: 'Narrative Designer', role: 'Story & Dialogue', icon: 'fa-book-open', color: 'text-accent-purple' },
+    { id: 'game_tech_artist', name: 'Technical Artist', role: 'Shaders & Pipeline', icon: 'fa-paint-roller', color: 'text-accent-purple' }
+  ],
+  'Spatial Computing': [
+    { id: 'sc_visionos', name: 'VisionOS Spatial Engineer', role: 'Apple Vision Pro', icon: 'fa-vr-cardboard', color: 'text-accent-purple' },
+    { id: 'sc_xr_cockpit', name: 'XR Cockpit Interaction Specialist', role: 'XR Interfaces', icon: 'fa-display', color: 'text-accent-purple' },
+    { id: 'sc_xr_immersive', name: 'XR Immersive Developer', role: 'VR/AR Apps', icon: 'fa-vr-cardboard', color: 'text-accent-purple' },
+    { id: 'sc_xr_architect', name: 'XR Interface Architect', role: 'XR System Design', icon: 'fa-cube', color: 'text-accent-purple' },
+    { id: 'sc_macos_spatial', name: 'macOS Spatial Metal Engineer', role: 'Metal Graphics', icon: 'fa-apple-whole', color: 'text-accent-purple' },
+    { id: 'sc_terminal', name: 'Terminal Integration Specialist', role: 'CLI Tooling', icon: 'fa-terminal', color: 'text-accent-purple' }
+  ],
+  'GIS & Geospatial': [
+    { id: 'gis_analyst', name: 'GIS Analyst', role: 'Spatial Analysis', icon: 'fa-earth-americas', color: 'text-accent-cyan' },
+    { id: 'gis_3d_scene', name: '3D Scene Developer', role: '3D Visualization', icon: 'fa-cubes', color: 'text-accent-cyan' },
+    { id: 'gis_bim', name: 'BIM Specialist', role: 'Building Info Modeling', icon: 'fa-building', color: 'text-accent-cyan' },
+    { id: 'gis_cartography', name: 'Cartography Designer', role: 'Map Design', icon: 'fa-map-location-dot', color: 'text-accent-cyan' },
+    { id: 'gis_drone', name: 'Drone Reality Mapping', role: 'Aerial Survey', icon: 'fa-helicopter', color: 'text-accent-cyan' },
+    { id: 'gis_geoai', name: 'GeoAI/ML Engineer', role: 'Spatial ML', icon: 'fa-brain', color: 'text-accent-cyan' },
+    { id: 'gis_spatial_data', name: 'Spatial Data Engineer', role: 'Geo Databases', icon: 'fa-database', color: 'text-accent-cyan' },
+    { id: 'gis_web', name: 'Web GIS Developer', role: 'Map Applications', icon: 'fa-globe', color: 'text-accent-cyan' }
+  ],
+  'Academic': [
+    { id: 'acad_anthropologist', name: 'Anthropologist', role: 'Cultural Research', icon: 'fa-users', color: 'text-accent-purple' },
+    { id: 'acad_geographer', name: 'Geographer', role: 'Spatial Studies', icon: 'fa-earth-americas', color: 'text-accent-purple' },
+    { id: 'acad_historian', name: 'Historian', role: 'Historical Research', icon: 'fa-landmark', color: 'text-accent-purple' },
+    { id: 'acad_narratologist', name: 'Narratologist', role: 'Story Analysis', icon: 'fa-scroll', color: 'text-accent-purple' },
+    { id: 'acad_psychologist', name: 'Psychologist', role: 'Behavioral Science', icon: 'fa-brain', color: 'text-accent-purple' }
+  ],
+  'Specialized': [
+    { id: 'spec_chief_of_staff', name: 'Chief of Staff', role: 'Executive Operations', icon: 'fa-user-tie', color: 'text-accent-purple' },
+    { id: 'spec_cfo', name: 'Chief Financial Officer', role: 'Financial Leadership', icon: 'fa-coins', color: 'text-accent-lime' },
+    { id: 'spec_business_strategist', name: 'Business Strategist', role: 'Corporate Strategy', icon: 'fa-chess', color: 'text-accent-purple' },
+    { id: 'spec_ops_manager', name: 'Operations Manager', role: 'Operations', icon: 'fa-gears', color: 'text-accent-cyan' },
+    { id: 'spec_customer_service', name: 'Customer Service Agent', role: 'Support', icon: 'fa-headset', color: 'text-accent-cyan' },
+    { id: 'spec_customer_success', name: 'Customer Success Manager', role: 'Retention', icon: 'fa-heart', color: 'text-accent-lime' },
+    { id: 'spec_hr_onboarding', name: 'HR Onboarding Specialist', role: 'People Ops', icon: 'fa-id-badge', color: 'text-accent-cyan' },
+    { id: 'spec_recruitment', name: 'Recruitment Specialist', role: 'Talent Acquisition', icon: 'fa-user-plus', color: 'text-accent-cyan' },
+    { id: 'spec_grant_writer', name: 'Grant Writer', role: 'Funding Applications', icon: 'fa-file-signature', color: 'text-accent-lime' },
+    { id: 'spec_dev_advocate', name: 'Developer Advocate', role: 'DevRel', icon: 'fa-bullhorn', color: 'text-accent-cyan' },
+    { id: 'spec_mcp_builder', name: 'MCP Builder', role: 'MCP Servers', icon: 'fa-plug-circle-bolt', color: 'text-accent-purple' },
+    { id: 'spec_workflow_arch', name: 'Workflow Architect', role: 'Process Design', icon: 'fa-diagram-project', color: 'text-accent-purple' },
+    { id: 'spec_doc_generator', name: 'Document Generator', role: 'Auto Documentation', icon: 'fa-file-pdf', color: 'text-accent-cyan' },
+    { id: 'spec_pricing_analyst', name: 'Pricing Analyst', role: 'Pricing Strategy', icon: 'fa-tags', color: 'text-accent-lime' },
+    { id: 'spec_salesforce_arch', name: 'Salesforce Architect', role: 'CRM Architecture', icon: 'fa-cloud', color: 'text-accent-cyan' },
+    { id: 'spec_strategy_duel', name: 'Strategy Duel Agent', role: 'Red Team/Blue Team', icon: 'fa-chess-knight', color: 'text-accent-red' },
+    { id: 'spec_data_privacy', name: 'Data Privacy Officer', role: 'GDPR & Privacy', icon: 'fa-user-shield', color: 'text-accent-red' },
+    { id: 'spec_esg', name: 'ESG Sustainability Officer', role: 'Sustainability', icon: 'fa-leaf', color: 'text-accent-lime' },
+    { id: 'spec_legal_doc_review', name: 'Legal Document Review', role: 'Contract Analysis', icon: 'fa-scale-balanced', color: 'text-accent-purple' },
+    { id: 'spec_legal_billing', name: 'Legal Billing & Time Tracking', role: 'Legal Ops', icon: 'fa-clock', color: 'text-accent-purple' },
+    { id: 'spec_supply_chain', name: 'Supply Chain Strategist', role: 'Logistics', icon: 'fa-truck-fast', color: 'text-accent-cyan' },
+    { id: 'spec_ma_integration', name: 'M&A Integration Manager', role: 'Mergers', icon: 'fa-arrows-rotate', color: 'text-accent-purple' },
+    { id: 'spec_org_psych', name: 'Organizational Psychologist', role: 'Culture & Behavior', icon: 'fa-brain', color: 'text-accent-purple' },
+    { id: 'spec_personal_growth', name: 'Personal Growth Mentor', role: 'Coaching', icon: 'fa-seedling', color: 'text-accent-lime' },
+    { id: 'spec_zk_steward', name: 'ZK Steward', role: 'Zero-Knowledge Proofs', icon: 'fa-lock', color: 'text-accent-purple' },
+    { id: 'spec_agents_orch', name: 'Agents Orchestrator', role: 'Multi-Agent Coordination', icon: 'fa-sitemap', color: 'text-accent-purple' },
+    { id: 'spec_change_mgmt', name: 'Change Management Consultant', role: 'Org Transformation', icon: 'fa-arrows-rotate', color: 'text-accent-cyan' },
+    { id: 'spec_healthcare_cs', name: 'Healthcare Customer Service', role: 'Patient Support', icon: 'fa-hospital', color: 'text-accent-cyan' },
+    { id: 'spec_healthcare_mkt', name: 'Healthcare Marketing Compliance', role: 'HIPAA Marketing', icon: 'fa-shield-virus', color: 'text-accent-red' },
+    { id: 'spec_hospitality', name: 'Hospitality Guest Services', role: 'Guest Experience', icon: 'fa-hotel', color: 'text-accent-cyan' },
+    { id: 'spec_real_estate', name: 'Real Estate Buyer/Seller', role: 'Property Transactions', icon: 'fa-house', color: 'text-accent-lime' },
+    { id: 'spec_loan_officer', name: 'Loan Officer Assistant', role: 'Lending', icon: 'fa-money-bill-transfer', color: 'text-accent-lime' },
+    { id: 'spec_medical_billing', name: 'Medical Billing & Coding', role: 'Healthcare Billing', icon: 'fa-file-medical', color: 'text-accent-cyan' },
+    { id: 'spec_language_translator', name: 'Language Translator', role: 'Translation & i18n', icon: 'fa-language', color: 'text-accent-cyan' }
+  ]
+};
+
+// Flatten departments into a single array for backwards compatibility
+const AgentTemplates = Object.values(AgentDepartments).flat();
 
 window.BusinessBuilderAgentRoster = AgentTemplates.map(agent => agent.name);
 
